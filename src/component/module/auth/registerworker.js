@@ -3,6 +3,8 @@ import React, {useState} from 'react';
 import Input from '../../base/text/input';
 import LargeButton from '../../base/button/largebutton';
 import {useNavigation} from '@react-navigation/native';
+import axios from 'axios';
+import { API_URL } from '@env';
 
 const TextRegisterWorker = () => {
   const [form, setForm] = useState({
@@ -13,11 +15,24 @@ const TextRegisterWorker = () => {
     confirm: '',
   });
 
-  const handleRegister = () => {
-    console.log(form);
-  };
-
   const navigation = useNavigation();
+
+  const handleRegister = async () => {
+    if (form.password !== form.confirm) {
+      Alert.alert('Passwords do not match!');
+      return;
+    }
+
+    try {
+      const res = await axios.post(`${API_URL}/users/register/workers`, form);
+      console.log(res.data);
+      navigation.navigate('LoginWorker');
+    } catch (error) {
+      const messageErr = error.response?.data?.message || 'Something went wrong!';
+      console.log(error);
+      Alert.alert(messageErr);
+    }
+  };
 
   return (
     <View>
@@ -80,10 +95,7 @@ const TextRegisterWorker = () => {
         />
       </View>
       <View style={{padding: 30}}>
-        <LargeButton
-          label="Sign Up"
-          onPress={() => navigation.navigate('LoginWorker')}
-        />
+        <LargeButton label="Sign Up" onPress={handleRegister} />
         <Text
           style={{
             color: '#000000',

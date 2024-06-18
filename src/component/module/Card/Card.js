@@ -4,16 +4,18 @@ import styles from '../../../css/card';
 import Profile from '../../../assets/image/bg/profile1.png';
 import Category from '../Category/Category';
 
-const Card = () => {
+const Card = ({item}) => {
+  const imageProfile = item?.imageUrl ? {uri: item.imageUrl} : Profile;
+
   return (
     <View style={styles.CardContainer}>
       <View style={styles.CardData}>
         <View>
-          <Image source={Profile} style={styles.CardProfile} />
+          <Image source={imageProfile} style={styles.CardProfile} />
         </View>
         <View>
-          <Text style={styles.CardProfileName}>John Doe</Text>
-          <Text style={styles.CardProfileJob}>Web Developer</Text>
+          <Text style={styles.CardProfileName}>{item?.name}</Text>
+          <Text style={styles.CardProfileJob}>{item?.description}</Text>
           <View style={styles.CategoryContainer}>
             <View
               style={{

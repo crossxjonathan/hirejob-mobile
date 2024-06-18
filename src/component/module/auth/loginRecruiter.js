@@ -1,8 +1,11 @@
-import {View, Text} from 'react-native';
+import {View, Text, Alert} from 'react-native';
 import React, {useState} from 'react';
 import Input from '../../base/text/input';
 import LargeButton from '../../base/button/largebutton';
 import {useNavigation} from '@react-navigation/native';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {API_URL} from '@env';
 
 const TextLoginRecruiter = () => {
   const [form, setForm] = useState({
@@ -10,11 +13,22 @@ const TextLoginRecruiter = () => {
     password: '',
   });
 
-  const handleLogin = () => {
-    console.log(form);
-  };
-
   const navigation = useNavigation();
+
+  const handleLogin = async () => {
+    try {
+      const res = await axios.post(`${API_URL}/users/login`, form);
+      console.log(res.data);
+      const {data} = res.data;
+      Alert.alert('Welcome!!');
+      await AsyncStorage.setItem('token', data.token);
+      navigation.navigate('MainTab');
+    } catch (error) {
+      const messageErr = error.response;
+      console.log(messageErr);
+      Alert.alert('Something Wrong!!');
+    }
+  };
 
   return (
     <View>
@@ -51,13 +65,7 @@ const TextLoginRecruiter = () => {
         Forget Password?
       </Text>
       <View style={{padding: 30}}>
-        <LargeButton
-          label="Sign In"
-          onPress={() => {
-            handleLogin();
-            navigation.navigate('MainTab');
-          }}
-        />
+        <LargeButton label="Sign In" onPress={handleLogin} />
         <Text style={{color: '#000000', paddingTop: 20, fontSize: 15}}>
           You don't have an account yet?{' '}
           <Text

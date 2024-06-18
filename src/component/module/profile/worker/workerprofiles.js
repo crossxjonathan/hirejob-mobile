@@ -1,13 +1,59 @@
-import {View, Text, Image} from 'react-native';
-import React from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import {View, Text, Image, Alert} from 'react-native';
+import React, {useEffect, useState} from 'react';
 import Profile from '../../../../assets/image/bg/profile1.png';
 import Location from '../../../../assets/image/icon/map.png';
 import LargeButtonPurple from '../../../base/button/largebuttonpurple';
 import SkillContainer from '../../Skill/skillcontainer';
 import {useNavigation} from '@react-navigation/native';
+import LargeTransparentPurple from '../../../base/button/largetransparentpurple';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
+import {API_URL} from '@env';
 
-const WorkerProfiles = () => {
-  const Navigation = useNavigation();
+const WorkerProfiles = ({id}) => {
+  const navigation = useNavigation();
+  const [profile, setProfile] = useState({});
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+
+  const handleLogout = async () => {
+    try {
+      await AsyncStorage.removeItem('Token');
+      Alert.alert('Logged out', 'You have been logged out successfully.');
+      navigation.navigate('LoginWorker');
+    } catch (error) {
+      console.error('Error logging out: ', error);
+      Alert.alert('Logout Error', 'Something went wrong. Please try again.');
+    }
+  };
+
+  const handleGetProfile = async () => {
+    try {
+      const res = await axios.get(`${API_URL}/workers/${id}`);
+      setProfile(res.data);
+      setLoading(false);
+      setError('');
+      console.log(res.data, '<<<<<<<<<<<<<<<<<<<res');
+    } catch (error) {
+      console.log(error);
+      Alert.alert('Error', error.message);
+      setLoading(false);
+      setError('Fetching Profile Failure', error);
+    }
+  };
+
+  useEffect(() => {
+    handleGetProfile();
+  }, [handleGetProfile]);
+
+  if (loading) {
+    return (
+      <View>
+        <Text>Loading...</Text>
+      </View>
+    );
+  }
 
   return (
     <View>
@@ -39,19 +85,19 @@ const WorkerProfiles = () => {
           gap: 10,
         }}>
         <Text style={{color: '#000000', fontSize: 20, fontWeight: '600'}}>
-          John Doe
+          {profile.name || 'Name:....'}
         </Text>
         <Text style={{color: '#1F2A36', fontSize: 14, fontWeight: '400'}}>
-          Web Developer
+          {profile.job || 'Job:....'}
         </Text>
         <View style={{display: 'flex', flexDirection: 'row', gap: 5}}>
           <Image source={Location} style={{width: 20, height: 20}} />
           <Text style={{color: '#aaaaaa', fontWeight: '400'}}>
-            Purwokerto, Jawa Tengah
+            {profile.location || 'Location:....'}
           </Text>
         </View>
         <Text style={{color: '#aaaaaa', fontSize: 14, fontWeight: '500'}}>
-          Freelancer
+          {profile.type || 'Type:....'}
         </Text>
         <Text
           style={{
@@ -61,16 +107,15 @@ const WorkerProfiles = () => {
             paddingBottom: 20,
             textAlign: 'left',
           }}>
-          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Eos labore
-          dignissimos laudantium ab laboriosam natus fugit est voluptatibus, non
-          cumque, illum pariatur, tempore voluptas facilis consequatur incidunt
-          architecto placeat dolorum?
+          {profile.description || 'Description:....'}
         </Text>
-        <View style={{position: 'relative', right: 10, paddingBottom: 20}}>
+        <View
+          style={{position: 'relative', right: 10, paddingBottom: 20, gap: 10}}>
           <LargeButtonPurple
             label="Edit"
-            onPress={() => Navigation.navigate('Edit Worker')}
+            onPress={() => navigation.navigate('Edit Worker')}
           />
+          <LargeTransparentPurple label="Log out" onPress={handleLogout} />
         </View>
         <View>
           <Text style={{color: '#000000', fontSize: 20, fontWeight: '600'}}>

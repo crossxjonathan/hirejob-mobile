@@ -1,4 +1,4 @@
-import {ScrollView, View} from 'react-native';
+import { ScrollView, View } from 'react-native';
 import React from 'react';
 import MainWorkerProfile from '../../component/module/profile/worker/worker';
 import LargeButtonPurple from '../../component/base/button/largebuttonpurple';

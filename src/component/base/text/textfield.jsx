@@ -2,7 +2,7 @@ import {View, TextInput} from 'react-native';
 import React from 'react';
 import styles from '../../../css/input';
 
-const TextField = ({placeholder}) => {
+const TextField = ({placeholder, value}) => {
   return (
     <View style={styles.container}>
       <TextInput
@@ -12,6 +12,7 @@ const TextField = ({placeholder}) => {
         multiline={true}
         scrollEnabled={true}
         numberOfLines={4}
+        value={value}
       />
     </View>
   );

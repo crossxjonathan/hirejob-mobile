@@ -1,8 +1,10 @@
-import {View, Text} from 'react-native';
+import {View, Text, Alert} from 'react-native';
 import React, {useState} from 'react';
 import Input from '../../base/text/input';
 import LargeButton from '../../base/button/largebutton';
 import {useNavigation} from '@react-navigation/native';
+import axios from 'axios';
+import {API_URL} from '@env';
 
 const TextRegisterRecruiter = () => {
   const [form, setForm] = useState({
@@ -15,11 +17,28 @@ const TextRegisterRecruiter = () => {
     confirm: '',
   });
 
-  const handleRegister = () => {
-    console.log(form);
-  };
-
   const navigation = useNavigation();
+
+  const handleRegister = async () => {
+    if (form.password !== form.confirm) {
+      Alert.alert('Passwords do not match!');
+      return;
+    }
+
+    try {
+      const res = await axios.post(
+        `${API_URL}/users/register/recruiters`,
+        form,
+      );
+      console.log(res.data);
+      navigation.navigate('LoginRecruiter');
+    } catch (error) {
+      const messageErr =
+        error.response?.data?.message || 'Something went wrong!';
+      console.log(error);
+      Alert.alert(messageErr);
+    }
+  };
 
   return (
     <View>
@@ -104,10 +123,7 @@ const TextRegisterRecruiter = () => {
         />
       </View>
       <View style={{padding: 30}}>
-        <LargeButton
-          label="Sign Up"
-          onPress={() => navigation.navigate('LoginRecruiter')}
-        />
+        <LargeButton label="Sign Up" onPress={handleRegister} />
         <Text
           style={{
             color: '#000000',
