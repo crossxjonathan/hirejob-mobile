@@ -2,14 +2,14 @@ import {View, Text, Pressable} from 'react-native';
 import React from 'react';
 import styles from '../../../css/button';
 
-const SmallButton = ({label = '', onPress}) => {
+const MediumTransparentBlue = ({label = '', onPress}) => {
   return (
-    <View style={styles.smallbutton}>
+    <View style={styles.mediumtransparentblue}>
       <Pressable onPress={onPress}>
-        <Text style={styles.buttonText}>{label}</Text>
+        <Text style={styles.buttonTextBlue}>{label}</Text>
       </Pressable>
     </View>
   );
 };
 
-export default SmallButton;
+export default MediumTransparentBlue;

@@ -1,54 +1,101 @@
-import {View, Text, Image} from 'react-native';
-import React from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import {View, Text, Image, Alert, ScrollView} from 'react-native';
+import React, {useEffect, useState} from 'react';
 import Profile from '../../../../assets/image/bg/profile1.png';
 import Location from '../../../../assets/image/icon/map.png';
 import LargeButtonPurple from '../../../base/button/largebuttonpurple';
 import SkillContainer from '../../Skill/skillcontainer';
+import axios from 'axios';
+import {API_URL} from '@env';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useNavigation, useRoute} from '@react-navigation/native';
 
 const WorkerProfileDetail = () => {
+  const navigation = useNavigation();
+  const route = useRoute();
+  const {id} = route.params;
+  const [profile, setProfile] = useState({});
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+
+  const handleGetProfile = async () => {
+    try {
+      console.log(id, '<<<<<<<<<<<<<<<<<<<<<<<<<id');
+      const token = await AsyncStorage.getItem('token');
+      if (!token) {
+        throw new Error('Token not found');
+      }
+
+      const res = await axios.get(`${API_URL}/workers/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setProfile(res.data.data);
+      setLoading(false);
+      setError('');
+      console.log(res.data.data, 'Profile data fetched successfully');
+    } catch (error) {
+      console.error(
+        'Error fetching profile:',
+        error.response?.data || error.message,
+      );
+      Alert.alert('Error', error.response?.data?.message || error.message);
+      setLoading(false);
+      setError(error.response?.data?.message || 'Fetching Profile Failure');
+    }
+  };
+
+  const handleHire = () => {
+    navigation.navigate('HireWorker');
+  };
+
+  useEffect(() => {
+    if (id) {
+      handleGetProfile(id);
+    }
+  }, [id]);
+
   return (
-    <View>
-      <View
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          paddingTop: 40,
-          gap: 15,
-          backgroundColor: '#ffffff',
-          height: 700,
-          borderRadius: 10,
-        }}>
+    <ScrollView
+      contentContainerStyle={{
+        alignItems: 'center',
+        paddingVertical: 40,
+        backgroundColor: '#ffffff',
+      }}>
+      <View>
         <Image
-          source={Profile}
+          source={profile.photo ? {uri: profile.photo} : Profile}
           style={{
             width: 100,
             height: 100,
             borderRadius: 100,
-            border: '2px solid #000000',
+            borderWidth: 2,
+            borderColor: '#000000',
           }}
         />
       </View>
       <View
-        style={{
-          position: 'absolute',
-          paddingTop: 150,
-          paddingLeft: 20,
-          gap: 10,
-        }}>
+        style={{paddingTop: 20, alignItems: 'baseline', width: '90%', gap: 5}}>
         <Text style={{color: '#000000', fontSize: 20, fontWeight: '600'}}>
-          John Doe
+          {profile.name ? profile.name : 'Name:'}
         </Text>
         <Text style={{color: '#1F2A36', fontSize: 14, fontWeight: '400'}}>
-          Web Developer
+          {profile.job_desk ? profile.job_desk : 'Job:'}
         </Text>
-        <View style={{display: 'flex', flexDirection: 'row', gap: 5}}>
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            marginVertical: 5,
+          }}>
           <Image source={Location} style={{width: 20, height: 20}} />
-          <Text style={{color: '#aaaaaa', fontWeight: '400'}}>
-            Purwokerto, Jawa Tengah
+          <Text style={{color: '#aaaaaa', marginLeft: 5}}>
+            {profile.domicile ? profile.domicile : 'Domicile:'}
           </Text>
         </View>
         <Text style={{color: '#aaaaaa', fontSize: 14, fontWeight: '500'}}>
-          Freelancer
+          {profile.workplace ? profile.workplace : 'Workplace:'}
         </Text>
         <Text
           style={{
@@ -58,39 +105,28 @@ const WorkerProfileDetail = () => {
             paddingBottom: 20,
             textAlign: 'left',
           }}>
-          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Eos labore
-          dignissimos laudantium ab laboriosam natus fugit est voluptatibus, non
-          cumque, illum pariatur, tempore voluptas facilis consequatur incidunt
-          architecto placeat dolorum?
+          {profile.description || 'Description'}
         </Text>
-        <View style={{position: 'relative', right: 10, paddingBottom: 20}}>
-          <LargeButtonPurple label="Hire" />
-        </View>
-        <View>
-          <Text style={{color: '#000000', fontSize: 20, fontWeight: '600'}}>
-            Skill
-          </Text>
-          <View
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              flex: 1,
-              flexWrap: 'wrap',
-              gap: 10,
-              paddingTop: 10,
-            }}>
-            <SkillContainer />
-            <SkillContainer />
-            <SkillContainer />
-            <SkillContainer />
-            <SkillContainer />
-            <SkillContainer />
-            <SkillContainer />
-            <SkillContainer />
-          </View>
+        <LargeButtonPurple onPress={handleHire} label="Hire" />
+        <Text
+          style={{
+            color: '#000000',
+            fontSize: 20,
+            fontWeight: '600',
+            marginVertical: 20,
+          }}>
+          Skill
+        </Text>
+        <View
+          style={{
+            flexDirection: 'row',
+            flexWrap: 'wrap',
+            gap: 10,
+          }}>
+          <SkillContainer id={id} />
         </View>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 

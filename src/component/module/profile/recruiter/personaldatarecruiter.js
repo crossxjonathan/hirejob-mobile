@@ -3,7 +3,7 @@ import React from 'react';
 import Textinput from '../../../base/text/textinput';
 import TextField from '../../../base/text/textfield';
 
-const PersonalData = ({form, setForm}) => {
+const PersonalDataRecruiter = ({form, setForm}) => {
   const handleChange = (name, value) => {
     setForm({...form, [name]: value});
   };
@@ -13,7 +13,7 @@ const PersonalData = ({form, setForm}) => {
       style={{
         backgroundColor: '#ffffff',
         width: '100%',
-        height: 600,
+        height: 800,
         borderRadius: 5,
       }}>
       <Text
@@ -32,42 +32,62 @@ const PersonalData = ({form, setForm}) => {
         }}
       />
       <View style={{padding: 20}}>
-        <Text style={{color: '#aaaaaa', fontWeight: '600'}}>Full Name</Text>
+        <Text style={{color: '#aaaaaa', fontWeight: '600'}}>Company Name</Text>
         <View style={{paddingTop: 30}}>
           <Textinput
-            placeholder="Enter Your Full Name..."
-            value={form.fullname}
-            onChangeText={value => handleChange('fullname', value)}
+            placeholder="Enter Your Company Name..."
+            value={form.company}
+            onChangeText={value => handleChange('company', value)}
           />
         </View>
       </View>
       <View style={{padding: 20}}>
-        <Text style={{color: '#aaaaaa', fontWeight: '600'}}>Job Title</Text>
+        <Text style={{color: '#aaaaaa', fontWeight: '600'}}>Sector</Text>
         <View style={{paddingTop: 30}}>
           <Textinput
             placeholder="Enter Job Title"
-            value={form.job}
-            onChangeText={value => handleChange('job', value)}
+            value={form.position}
+            onChangeText={value => handleChange('position', value)}
           />
         </View>
       </View>
       <View style={{padding: 20}}>
-        <Text style={{color: '#aaaaaa', fontWeight: '600'}}>Domicile</Text>
+        <Text style={{color: '#aaaaaa', fontWeight: '600'}}>City</Text>
         <View style={{paddingTop: 30}}>
           <Textinput
-            placeholder="Enter Domicile"
-            value={form.domicile}
-            onChangeText={value => handleChange('domicile', value)}
+            placeholder="Enter city"
+            value={form.city}
+            onChangeText={value => handleChange('city', value)}
           />
         </View>
       </View>
       <View style={{padding: 20}}>
-        <Text style={{color: '#aaaaaa', fontWeight: '600'}}>Company</Text>
+        <Text style={{color: '#aaaaaa', fontWeight: '600'}}>Linked in</Text>
         <View style={{paddingTop: 30}}>
           <Textinput
-            placeholder="Enter Your Company"
-            value={form.company}
-            onChangeText={value => handleChange('company', value)}
+            placeholder="Enter Your Linked in"
+            value={form.linkedin}
+            onChangeText={value => handleChange('linkedin', value)}
+          />
+        </View>
+      </View>
+      <View style={{padding: 20}}>
+        <Text style={{color: '#aaaaaa', fontWeight: '600'}}>Instagram</Text>
+        <View style={{paddingTop: 30}}>
+          <Textinput
+            placeholder="Enter Your Instagram"
+            value={form.instagram}
+            onChangeText={value => handleChange('instagram', value)}
+          />
+        </View>
+      </View>
+      <View style={{padding: 20}}>
+        <Text style={{color: '#aaaaaa', fontWeight: '600'}}>Phone Number</Text>
+        <View style={{paddingTop: 30}}>
+          <Textinput
+            placeholder="Enter Your Phone Number"
+            value={form.phone}
+            onChangeText={value => handleChange('phone', value)}
           />
         </View>
       </View>
@@ -85,4 +105,4 @@ const PersonalData = ({form, setForm}) => {
   );
 };
 
-export default PersonalData;
+export default PersonalDataRecruiter;

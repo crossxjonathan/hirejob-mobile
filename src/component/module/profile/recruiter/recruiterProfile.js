@@ -2,15 +2,16 @@ import {View, Text, Image, Alert} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import Profile from '../../../../assets/image/bg/profile1.png';
 import Location from '../../../../assets/image/icon/map.png';
+import Instagram from '../../../../assets/image/icon/instagram.png';
+import Linkedin from '../../../../assets/image/icon/LinkedIn.png';
 import LargeButtonPurple from '../../../base/button/largebuttonpurple';
-import SkillContainer from '../../Skill/skillcontainer';
 import {useNavigation} from '@react-navigation/native';
 import LargeTransparentPurple from '../../../base/button/largetransparentpurple';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import {API_URL} from '@env';
 
-const WorkerProfiles = () => {
+const RecruiterProfiles = () => {
   const navigation = useNavigation();
   const [profile, setProfile] = useState({});
   const [loading, setLoading] = useState(true);
@@ -20,7 +21,7 @@ const WorkerProfiles = () => {
     try {
       await AsyncStorage.removeItem('token');
       Alert.alert('Logged out', 'You have been logged out successfully.');
-      navigation.navigate('LoginWorker');
+      navigation.navigate('LoginRecruiter');
     } catch (error) {
       console.error('Error logging out: ', error);
       Alert.alert('Logout Error', 'Something went wrong. Please try again.');
@@ -35,7 +36,7 @@ const WorkerProfiles = () => {
         throw new Error('Token not found');
       }
 
-      const res = await axios.get(`${API_URL}/workers/profile`, {
+      const res = await axios.get(`${API_URL}/recruiters/profile`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -76,16 +77,21 @@ const WorkerProfiles = () => {
           paddingTop: 40,
           gap: 15,
           backgroundColor: '#ffffff',
-          height: 700,
+          height: 600,
           borderRadius: 10,
         }}>
         <Image
-          source={profile.photo ? {uri: profile.photo} : Profile}
+          source={
+            profile.photo && typeof profile.photo === 'string'
+              ? {uri: profile.photo}
+              : Profile
+          }
           style={{
             width: 100,
             height: 100,
             borderRadius: 100,
-            border: '2px solid #000000',
+            borderColor: '#673ab7',
+            borderWidth: 2,
           }}
         />
       </View>
@@ -97,20 +103,17 @@ const WorkerProfiles = () => {
           gap: 10,
         }}>
         <Text style={{color: '#000000', fontSize: 20, fontWeight: '600'}}>
-          {profile.name || 'Name:....'}
+          {profile.company || 'Company:....'}
         </Text>
         <Text style={{color: '#1F2A36', fontSize: 14, fontWeight: '400'}}>
-          {profile.job_desk || 'Job:....'}
+          {profile.position || 'Position:....'}
         </Text>
         <View style={{display: 'flex', flexDirection: 'row', gap: 5}}>
           <Image source={Location} style={{width: 20, height: 20}} />
           <Text style={{color: '#aaaaaa', fontWeight: '400'}}>
-            {profile.domicile || 'Location:....'}
+            {profile.city || 'City:....'}
           </Text>
         </View>
-        <Text style={{color: '#aaaaaa', fontSize: 16, fontWeight: '500'}}>
-          {profile.workplace || 'workplace:....'}
-        </Text>
         <Text
           style={{
             color: '#aaaaaa',
@@ -125,14 +128,11 @@ const WorkerProfiles = () => {
           style={{position: 'relative', right: 10, paddingBottom: 20, gap: 10}}>
           <LargeButtonPurple
             label="Edit"
-            onPress={() => navigation.navigate('EditWorkerProfile')}
+            onPress={() => navigation.navigate('EditRecruiterProfile')}
           />
           <LargeTransparentPurple label="Log out" onPress={handleLogout} />
         </View>
         <View>
-          <Text style={{color: '#000000', fontSize: 20, fontWeight: '600'}}>
-            Skill
-          </Text>
           <View
             style={{
               display: 'flex',
@@ -142,7 +142,20 @@ const WorkerProfiles = () => {
               gap: 10,
               paddingTop: 10,
             }}>
-            <SkillContainer />
+            <View style={{display: 'flex', flexDirection: 'column', gap: 5}}>
+              <View style={{display: 'flex', flexDirection: 'row', gap: 5}}>
+                <Image source={Instagram} style={{width: 36, height: 36}} />
+                <Text style={{color: '#aaaaaa', fontWeight: '400', padding: 5}}>
+                  {profile.instagram || 'Instagram :....'}
+                </Text>
+              </View>
+              <View style={{display: 'flex', flexDirection: 'row', gap: 4}}>
+                <Image source={Linkedin} style={{width: 36, height: 36}} />
+                <Text style={{color: '#aaaaaa', fontWeight: '400', padding: 5}}>
+                  {profile.linkedin || 'Linked in :....'}
+                </Text>
+              </View>
+            </View>
           </View>
         </View>
       </View>
@@ -150,4 +163,4 @@ const WorkerProfiles = () => {
   );
 };
 
-export default WorkerProfiles;
+export default RecruiterProfiles;

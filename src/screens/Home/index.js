@@ -1,11 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import {View, Text, ScrollView, ActivityIndicator} from 'react-native';
+import {View, Text, ScrollView, ActivityIndicator, Alert} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import Header from '../../component/module/Layout/header';
 import Card from '../../component/module/Card/Card';
 import axios from 'axios';
 import {API_URL} from '@env';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useNavigation} from '@react-navigation/native';
 
 const Home = () => {
   const [data, setData] = useState([]);
@@ -16,6 +17,7 @@ const Home = () => {
     page: 1,
     limit: 10,
   });
+  const navigation = useNavigation();
 
   const handleGetAllData = async () => {
     try {
@@ -95,7 +97,7 @@ const Home = () => {
       onScroll={handleScroll}
       scrollEventThrottle={16}>
       <Header />
-      <View style={{padding: 20, gap: 15}}>
+      <View style={{padding: 20, gap: 15}} navigation={navigation}>
         {data.map((item, index) => (
           <Card key={index} item={item} />
         ))}

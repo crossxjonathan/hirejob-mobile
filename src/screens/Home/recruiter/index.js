@@ -1,13 +1,14 @@
-import { View, Text, ScrollView, ActivityIndicator } from 'react-native';
-import React, { useEffect, useState } from 'react';
-import Card from '../../component/module/Card/Card';
+/* eslint-disable react-hooks/exhaustive-deps */
+import {View, Text, ScrollView, ActivityIndicator, Alert} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import Card from '../../../component/module/Card/Card';
 import axios from 'axios';
-import { API_URL } from '@env';
+import {API_URL} from '@env';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useNavigation } from '@react-navigation/native';
-import SearchContainer from '../../component/module/Search/search';
+import {useNavigation} from '@react-navigation/native';
+import Navbar from '../../../component/module/Layout/navbar';
 
-const SearchPage = () => {
+const HomeRecruiter = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
@@ -15,23 +16,10 @@ const SearchPage = () => {
   const [params, setParams] = useState({
     page: 1,
     limit: 10,
-    search: '',
-    sort: null,
   });
-
   const navigation = useNavigation();
 
-  const sortData = (data, sortType) => {
-    if (sortType === 'asc') {
-      return data.sort((a, b) => (a.name > b.name ? 1 : -1));
-    } else if (sortType === 'desc') {
-      return data.sort((a, b) => (a.name > b.name ? -1 : 1));
-    }
-    return data;
-  };
-
   const handleGetAllData = async () => {
-    // console.log('Fetching data with params:', params);
     try {
       const token = await AsyncStorage.getItem('token');
       if (!token) {
@@ -43,8 +31,7 @@ const SearchPage = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-      let workers = response.data.data;
-      workers = sortData(workers, params.sort);
+      const workers = response.data.data;
       if (params.page === 1) {
         setData(workers || []);
       } else {
@@ -61,9 +48,9 @@ const SearchPage = () => {
 
   useEffect(() => {
     handleGetAllData();
-  }, [params.page, params.search, params.sort]);
+  }, [handleGetAllData, params.page]);
 
-  const handleScroll = ({ nativeEvent }) => {
+  const handleScroll = ({nativeEvent}) => {
     const paddingToBottom = 20;
     const isCloseToBottom =
       nativeEvent.layoutMeasurement.height + nativeEvent.contentOffset.y >=
@@ -78,25 +65,9 @@ const SearchPage = () => {
     }
   };
 
-  const handleSearchTextChange = (text) => {
-    setParams(prevParams => ({
-      ...prevParams,
-      search: text,
-      page: 1,
-    }));
-  };
-
-  const handleSortChange = (value) => {
-    setParams(prevParams => ({
-      ...prevParams,
-      sort: value,
-      page: 1,
-    }));
-  };
-
   if (loading && params.page === 1) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
         <ActivityIndicator size="large" color="#5E50A1" />
       </View>
     );
@@ -104,7 +75,7 @@ const SearchPage = () => {
 
   if (error) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
         <Text>Error fetching data</Text>
       </View>
     );
@@ -113,7 +84,7 @@ const SearchPage = () => {
   const renderLoader = () => {
     return (
       loadingMore && (
-        <View style={{ paddingVertical: 20 }}>
+        <View style={{paddingVertical: 20}}>
           <ActivityIndicator size="large" color="#5E50A1" />
         </View>
       )
@@ -125,13 +96,8 @@ const SearchPage = () => {
       stickyHeaderIndices={[0]}
       onScroll={handleScroll}
       scrollEventThrottle={16}>
-      <SearchContainer
-        searchText={params.search}
-        setSearchText={handleSearchTextChange}
-        selectedValue={params.sort}
-        setSelectedValue={handleSortChange}
-      />
-      <View style={{ padding: 20, gap: 15 }} navigation={navigation}>
+      <Navbar />
+      <View style={{padding: 20, gap: 15}} navigation={navigation}>
         {data.map((item, index) => (
           <Card key={index} item={item} />
         ))}
@@ -141,4 +107,4 @@ const SearchPage = () => {
   );
 };
 
-export default SearchPage;
+export default HomeRecruiter;

@@ -4,7 +4,7 @@ export default StyleSheet.create({
   containerPortfolio: {
     backgroundColor: '#ffffff',
     width: '100%',
-    height: 1100,
+    height: 'auto',
     borderRadius: 5,
   },
   titlePortfolio: {
@@ -26,7 +26,7 @@ export default StyleSheet.create({
     paddingLeft: 10,
   },
   spacetitleapp: {
-    paddingTop: 30,
+    paddingTop: 10,
   },
   titledesc: {
     color: '#aaaaaa',
@@ -34,16 +34,16 @@ export default StyleSheet.create({
     paddingLeft: 10,
   },
   spacetitledesc: {
-    paddingTop: 55,
+    paddingTop: 15,
   },
   linkpublictitle: {
     color: '#aaaaaa',
     fontWeight: '600',
     paddingLeft: 10,
-    paddingTop: 20,
+    paddingTop: 10,
   },
   spacelinkpublictitle: {
-    paddingTop: 30,
+    paddingTop: 10,
   },
   linkrepotitle: {
     color: '#aaaaaa',
@@ -51,7 +51,7 @@ export default StyleSheet.create({
     paddingLeft: 10,
   },
   spacelinkrepotitle: {
-    paddingTop: 30,
+    paddingTop: 10,
   },
   linkworkspacetitle: {
     color: '#aaaaaa',
@@ -59,7 +59,7 @@ export default StyleSheet.create({
     paddingLeft: 10,
   },
   spacelinkworkspacetitle: {
-    paddingTop: 30,
+    paddingTop: 10,
   },
   titleupload: {
     color: '#aaaaaa',
@@ -164,7 +164,7 @@ export default StyleSheet.create({
   radioButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginRight: 20,
+    marginRight: 10,
   },
   radioSelected: {
     height: 20,
@@ -189,5 +189,19 @@ export default StyleSheet.create({
   radioTextUnselected: {
     color: '#aaaaaa',
     fontWeight: '600',
+  },
+  imagePreviewContainer: {
+    marginTop: 20,
+    alignItems: 'center',
+  },
+  imagePreviewText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  previewImage: {
+    width: 200,
+    height: 200,
+    resizeMode: 'cover',
   },
 });
