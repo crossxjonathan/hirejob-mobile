@@ -3,8 +3,8 @@ import {
   Text,
   Image,
   ActivityIndicator,
-  TouchableOpacity,
   Alert,
+  TouchableOpacity,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -16,7 +16,7 @@ import axios from 'axios';
 import {API_URL} from '@env';
 import {useNavigation} from '@react-navigation/native';
 
-const Header = () => {
+const Navbar = () => {
   const [data, setData] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -32,13 +32,14 @@ const Header = () => {
       if (!token) {
         throw new Error('No token found');
       }
-      const response = await axios.get(`${API_URL}/workers/profile`, {
+      console.log(response, '<<<<<<<<<<<<<<<<res');
+      const response = await axios.get(`${API_URL}/recruiters/profile`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
       setData(response.data);
-      // console.log(response.data, '<<<<<<<<<<<<<<<<res');
+      //   console.log(response.data, '<<<<<<<<<<<<<<<<res');
     } catch (error) {
       console.log(error);
       setError(error);
@@ -81,7 +82,7 @@ const Header = () => {
           </Moment>
         </Text>
         <Text style={{paddingTop: 10, paddingLeft: 18, fontSize: 28}}>
-          Hello, {data.profile?.name} !!
+          Hello, {data.profile?.company} !!
         </Text>
       </View>
       <TouchableOpacity
@@ -98,11 +99,11 @@ const Header = () => {
       <View>
         <Image
           source={vector}
-          style={{zIndex: 1, width: '100%', height: 170}}
+          style={{zIndex: 2, width: '100%', height: 170}}
         />
       </View>
     </View>
   );
 };
 
-export default Header;
+export default Navbar;

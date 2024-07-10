@@ -17,7 +17,7 @@ import {API_URL} from '@env';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {useNavigation} from '@react-navigation/native';
 
-const MainWorkerProfile = () => {
+const MainRecruiterProfile = () => {
   const [profile, setProfile] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -58,7 +58,7 @@ const MainWorkerProfile = () => {
         throw new Error('Token not found');
       }
 
-      const res = await axios.get(`${API_URL}/workers/profile`, {
+      const res = await axios.get(`${API_URL}/recruiters/profile`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -170,7 +170,7 @@ const MainWorkerProfile = () => {
       });
 
       const res = await axios.put(
-        `${API_URL}/workers/profile/photo`,
+        `${API_URL}/recruiters/profile/photo`,
         formData,
         {
           headers: {
@@ -184,7 +184,7 @@ const MainWorkerProfile = () => {
         ...prevProfile,
         photo: res.data.photo,
       }));
-      navigation.navigate('ProfileWorker');
+      navigation.navigate('ProfileRecruiter');
       Alert.alert('Success', 'Profile photo updated successfully');
     } catch (error) {
       console.error(
@@ -208,13 +208,17 @@ const MainWorkerProfile = () => {
           borderRadius: 10,
         }}>
         <Image
-          source={profile.photo ? {uri: profile.photo} : Profile}
+          source={
+            profile.photo && typeof profile.photo === 'string'
+              ? {uri: profile.photo}
+              : Profile
+          }
           style={{
             width: 100,
             height: 100,
             borderRadius: 100,
+            borderColor: '#673ab7',
             borderWidth: 2,
-            borderColor: '#000000',
           }}
         />
         <TouchableOpacity onPress={handleEditPhoto}>
@@ -249,23 +253,20 @@ const MainWorkerProfile = () => {
           gap: 10,
         }}>
         <Text style={{color: '#000000', fontSize: 20, fontWeight: '600'}}>
-          {profile.name || 'Name:....'}
+          {profile.company || 'Company:....'}
         </Text>
         <Text style={{color: '#1F2A36', fontSize: 14, fontWeight: '400'}}>
-          {profile.job_desk || 'Job:....'}
+          {profile.position || 'Position:....'}
         </Text>
         <View style={{display: 'flex', flexDirection: 'row', gap: 5}}>
           <Image source={Location} style={{width: 20, height: 20}} />
           <Text style={{color: '#aaaaaa', fontWeight: '400'}}>
-            {profile.domicile || 'Location:....'}
+            {profile.city || 'City:....'}
           </Text>
         </View>
-        <Text style={{color: '#aaaaaa', fontSize: 14, fontWeight: '500'}}>
-          {profile.workplace || 'Workplace:....'}
-        </Text>
       </View>
     </View>
   );
 };
 
-export default MainWorkerProfile;
+export default MainRecruiterProfile;

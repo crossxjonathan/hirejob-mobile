@@ -1,48 +1,84 @@
-import {View, TextInput, Image} from 'react-native';
-import React, {useState} from 'react';
-import list from '../../../assets/image/icon/list.png';
+import { View, TextInput, StyleSheet } from 'react-native';
+import React from 'react';
+import RNPickerSelect from 'react-native-picker-select';
 import search from '../../../assets/image/icon/searchicon.png';
+import { Image } from 'react-native';
 
-const SearchContainer = () => {
-  const [searchText, setSearchText] = useState('');
-
+const SearchContainer = ({ searchText, setSearchText, selectedValue, setSelectedValue }) => {
   return (
-    <View style={{padding: 20, flexDirection: 'row', gap: 10}}>
-      <View
-        style={{
-          backgroundColor: '#ffffff',
-          width: '80%',
-          height: 50,
-          borderRadius: 5,
-          paddingLeft: 15,
-          flexDirection: 'row',
-          alignItems: 'center',
-        }}>
-        <Image
-          source={search}
-          style={{width: 20, height: 20, marginRight: 10}}
-        />
+    <View style={styles.container}>
+      <View style={styles.searchBox}>
+        <Image source={search} style={styles.searchIcon} />
         <TextInput
-          style={{flex: 1, color: '#000000'}}
-          placeholder="Android Developer"
+          style={styles.input}
+          placeholder="Search..."
           placeholderTextColor="#aaaaaa"
           value={searchText}
           onChangeText={setSearchText}
         />
       </View>
-      <View
-        style={{
-          backgroundColor: '#ffffff',
-          width: '20%',
-          height: 50,
-          borderRadius: 5,
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}>
-        <Image source={list} style={{width: 30, height: 30}} />
-      </View>
+      <RNPickerSelect
+        onValueChange={(value) => setSelectedValue(value)}
+        items={[
+          { label: 'A - Z', value: 'asc' },
+          { label: 'Z - A', value: 'desc' },
+        ]}
+        placeholder={{
+          label: 'Select sort',
+          value: null,
+        }}
+        style={pickerSelectStyles}
+        value={selectedValue}
+      />
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    padding: 20,
+    flexDirection: 'column',
+    gap: 10,
+  },
+  searchBox: {
+    backgroundColor: '#ffffff',
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderRadius: 5,
+    paddingLeft: 15,
+    marginBottom: 10,
+  },
+  searchIcon: {
+    width: 20,
+    height: 20,
+    marginRight: 10,
+  },
+  input: {
+    flex: 1,
+    color: '#000000',
+  },
+});
+
+const pickerSelectStyles = StyleSheet.create({
+  inputAndroid: {
+    fontSize: 16,
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 8,
+    color: '#333',
+    paddingRight: 30,
+    backgroundColor: '#fff',
+    marginTop: 8,
+  },
+  placeholder: {
+    color: '#aaa',
+  },
+  iconContainer: {
+    top: 15,
+    right: 15,
+  },
+});
 
 export default SearchContainer;

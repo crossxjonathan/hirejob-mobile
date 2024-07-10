@@ -10,7 +10,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import {API_URL} from '@env';
 
-function TabBar({state, descriptors, navigation}) {
+function FootBar({state, descriptors, navigation}) {
   const [profileImage, setProfileImage] = useState(null);
 
   useEffect(() => {
@@ -20,7 +20,7 @@ function TabBar({state, descriptors, navigation}) {
         if (!token) {
           throw new Error('No token found');
         }
-        const response = await axios.get(`${API_URL}/workers/profile`, {
+        const response = await axios.get(`${API_URL}/recruiters/profile`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -132,7 +132,7 @@ function TabBar({state, descriptors, navigation}) {
   );
 }
 
-export default TabBar;
+export default FootBar;
 
 const styles = StyleSheet.create({
   container: {

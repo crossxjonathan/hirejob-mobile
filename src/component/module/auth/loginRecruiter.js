@@ -22,7 +22,7 @@ const TextLoginRecruiter = () => {
       const {data} = res.data;
       Alert.alert('Welcome!!');
       await AsyncStorage.setItem('token', data.token);
-      navigation.navigate('MainTab');
+      navigation.navigate('RecruiterTab');
     } catch (error) {
       const messageErr = error.response;
       console.log(messageErr);

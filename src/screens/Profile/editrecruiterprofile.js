@@ -11,15 +11,19 @@ import Portfolio from '../../component/module/profile/worker/portfolio';
 import {API_URL} from '@env';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useNavigation} from '@react-navigation/native';
+import MainRecruiterProfile from '../../component/module/profile/recruiter/recruiter';
+import PersonalDataRecruiter from '../../component/module/profile/recruiter/personaldatarecruiter';
 
-const EditWorkerProfile = () => {
+const EditRecruiterProfile = ({id}) => {
   const navigation = useNavigation();
   const [form, setForm] = useState({
-    fullname: '',
-    job: '',
-    domicile: '',
     company: '',
+    position: '',
+    city: '',
     description: '',
+    linkedin: '',
+    phone: '',
+    instagram: '',
   });
 
   const formRef = useRef(form);
@@ -29,7 +33,7 @@ const EditWorkerProfile = () => {
     const fetchData = async () => {
       try {
         const token = await AsyncStorage.getItem('token');
-        const response = await axios.get(`${API_URL}/workers/profile`, {
+        const response = await axios.get(`${API_URL}/recruiters/profile`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -37,11 +41,13 @@ const EditWorkerProfile = () => {
         const data = response.data.profile;
         console.log(data, '<<<<<<<<<<data');
         setForm({
-          fullname: data.name,
-          job: data.job_desk,
-          domicile: data.domicile,
-          company: data.workplace,
+          company: data.company,
+          position: data.position,
+          city: data.city,
           description: data.description,
+          linkedin: data.linkedin,
+          phone: data.phone,
+          instagram: data.instagram,
         });
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -60,23 +66,29 @@ const EditWorkerProfile = () => {
       }
 
       const payload = {
-        name: formRef.current.fullname,
-        job_desk: formRef.current.job,
-        domicile: formRef.current.domicile,
-        workplace: formRef.current.company,
+        company: formRef.current.company,
+        position: formRef.current.position,
+        city: formRef.current.city,
+        linkedin: formRef.current.linkedin,
+        instagram: formRef.current.instagram,
+        phone: formRef.current.phone,
         description: formRef.current.description,
       };
 
       // console.log('Payload:', payload);
 
-      const response = await axios.put(`${API_URL}/workers/profile`, payload, {
-        headers: {
-          Authorization: `Bearer ${token}`,
+      const response = await axios.put(
+        `${API_URL}/recruiters/profile`,
+        payload,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         },
-      });
+      );
 
       if (response.status === 200 && response.data.status === 'Success') {
-        navigation.navigate('ProfileWorker');
+        navigation.navigate('ProfileRecruiter');
         Alert.alert('Success', 'Profile updated successfully');
       } else {
         Alert.alert('Error', 'Failed to save data');
@@ -90,21 +102,21 @@ const EditWorkerProfile = () => {
   };
 
   const CancelButton = () => {
-    navigation.navigate('ProfileWorker');
+    navigation.navigate('ProfileRecruiter');
   };
 
   return (
     <ScrollView>
       <View style={{padding: 20, gap: 20}}>
-        <MainWorkerProfile />
+        <MainRecruiterProfile />
         <View style={{padding: 10, gap: 10}}>
           <LargeButtonPurple label="Save" onPress={handleSave} />
           <LargeTransparentPurple label="Cancel" onPress={CancelButton} />
         </View>
         <View>
-          <PersonalData form={form} setForm={setForm} />
+          <PersonalDataRecruiter form={form} setForm={setForm} />
         </View>
-        <View>
+        {/* <View>
           <Skill />
         </View>
         <View>
@@ -112,10 +124,10 @@ const EditWorkerProfile = () => {
         </View>
         <View>
           <Portfolio />
-        </View>
+        </View> */}
       </View>
     </ScrollView>
   );
 };
 
-export default EditWorkerProfile;
+export default EditRecruiterProfile;

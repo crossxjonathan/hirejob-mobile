@@ -1,16 +1,30 @@
-import {View, Text, Image, TouchableOpacity, Animated} from 'react-native';
-import React, {useState, useRef} from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  Animated,
+  ScrollView,
+  Alert,
+} from 'react-native';
+import React, {useState, useRef, useEffect} from 'react';
 import image1 from '../../../../assets/image/bg/Rectangle637.png';
-import image2 from '../../../../assets/image/bg/Rectangle638.png';
-import image3 from '../../../../assets/image/bg/Rectangle639.png';
-import image4 from '../../../../assets/image/bg/Rectangle640.png';
-import image5 from '../../../../assets/image/bg/Rectangle641.png';
-import image6 from '../../../../assets/image/bg/Rectangle642.png';
 import office from '../../../../assets/image/icon/office.png';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {API_URL} from '@env';
+import axios from 'axios';
+import {useRoute} from '@react-navigation/native';
 
 const WorkerOption = () => {
+  const [exp, setExp] = useState([]);
+  const [port, setPort] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
   const [activeTab, setActiveTab] = useState('Portfolio');
   const underlineAnim = useRef(new Animated.Value(0)).current;
+  const route = useRoute();
+  const {id} = route.params || {};
 
   const handleTabPress = tab => {
     setActiveTab(tab);
@@ -20,94 +34,185 @@ const WorkerOption = () => {
     }).start();
   };
 
+  const fetchData = async (endpoint, setState) => {
+    try {
+      const token = await AsyncStorage.getItem('token');
+      if (!token) {
+        console.error('No token found');
+        return;
+      }
+
+      const url = id
+        ? `${API_URL}/${endpoint}/${id}`
+        : `${API_URL}/${endpoint}`;
+      const result = await axios.get(url, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setState(result.data.data);
+      setLoading(false);
+      setError('');
+    } catch (error) {
+      console.error(
+        `Error fetching ${endpoint}:`,
+        error.response?.data || error.message,
+      );
+      Alert.alert('Error', error.response?.data?.message || error.message);
+      setLoading(false);
+      setError(error.response?.data?.message || `Fetching ${endpoint} Failure`);
+    }
+  };
+
+  useEffect(() => {
+    fetchData('experience', setExp);
+    fetchData('portfolio', setPort);
+  }, [id]);
+
+  const bufferToString = buffer => {
+    return String.fromCharCode.apply(null, new Uint8Array(buffer));
+  };
+
   const renderPortfolio = () => (
-    <View style={{padding: 20, gap: 20}}>
-      <Image
-        source={image1}
-        style={{width: 250, height: 200, borderRadius: 10}}
-      />
-      <Image
-        source={image2}
-        style={{width: 250, height: 200, borderRadius: 10}}
-      />
-      <Image
-        source={image3}
-        style={{width: 250, height: 200, borderRadius: 10}}
-      />
-      <Image
-        source={image4}
-        style={{width: 250, height: 200, borderRadius: 10}}
-      />
-      <Image
-        source={image5}
-        style={{width: 250, height: 200, borderRadius: 10}}
-      />
-      <Image
-        source={image6}
-        style={{width: 250, height: 200, borderRadius: 10}}
-      />
-    </View>
+    <ScrollView style={{padding: 20}}>
+      {loading ? (
+        <Text
+          style={{
+            color: '#ffffff',
+            textAlign: 'center',
+            fontWeight: '600',
+            fontSize: 18,
+          }}>
+          Loading...
+        </Text>
+      ) : error ? (
+        <Text
+          style={{
+            color: '#ffffff',
+            textAlign: 'center',
+            fontWeight: '600',
+            fontSize: 18,
+          }}>
+          Error: {error}
+        </Text>
+      ) : port.length === 0 ? (
+        <Text
+          style={{
+            color: '#000000',
+            textAlign: 'center',
+            fontWeight: '600',
+            fontSize: 18,
+          }}>
+          No Portfolio Found
+        </Text>
+      ) : (
+        port.map((portfolio, index) => {
+          const imageUrl = portfolio.upload_image?.data
+            ? bufferToString(portfolio.upload_image.data)
+            : null;
+
+          return (
+            <View key={index} style={{marginBottom: 20}}>
+              <Image
+                source={imageUrl ? {uri: imageUrl} : image1}
+                style={{
+                  width: 250,
+                  height: 300,
+                  borderRadius: 10,
+                  borderWidth: 2,
+                  borderColor: '#FBB017',
+                  marginBottom: 10,
+                }}
+              />
+              <Text style={{color: 'black', fontSize: 18, fontWeight: '600'}}>
+                {portfolio.application_name || 'application_name:'}
+              </Text>
+              <Text style={{color: 'black', fontSize: 15, fontWeight: '500'}}>
+                {portfolio.type_portfolio || 'type_portfolio:'}
+              </Text>
+              <Text style={{color: '#FBB017', fontSize: 13, fontWeight: '400'}}>
+                {portfolio.link_repository || 'link_repository:'}
+              </Text>
+            </View>
+          );
+        })
+      )}
+    </ScrollView>
   );
 
   const renderExperience = () => (
-    <View style={{padding: 20, gap: 50}}>
-      <View style={{display: 'flex', flexDirection: 'row', gap: 20}}>
-        <Image source={office} style={{width: 60, height: 60}} />
-        <View>
-          <Text style={{color: '#000000', fontSize: 25, fontWeight: '600'}}>
-            Engineer
-          </Text>
-          <Text style={{color: '#46505C', fontSize: 17, fontWeight: '500'}}>
-            Tokopedia
-          </Text>
-          <Text style={{color: '#9EA0A5', fontSize: 15, fontWeight: '500'}}>
-            July 2019 - January 2020
-          </Text>
-          <Text style={{color: '#9EA0A5', fontSize: 15, fontWeight: '500'}}>
-            6 months
-          </Text>
-          <Text
+    <ScrollView style={{padding: 20, gap: 50}}>
+      {loading ? (
+        <Text
+          style={{
+            color: '#0000FF',
+            textAlign: 'center',
+            fontWeight: '600',
+            fontSize: 18,
+          }}>
+          Loading...
+        </Text>
+      ) : error ? (
+        <Text
+          style={{
+            color: '#FF0000',
+            textAlign: 'center',
+            fontWeight: '600',
+            fontSize: 18,
+          }}>
+          Error: {error}
+        </Text>
+      ) : exp.length === 0 ? (
+        <Text
+          style={{
+            color: '#000000',
+            textAlign: 'center',
+            fontWeight: '600',
+            fontSize: 18,
+          }}>
+          No Experience Found
+        </Text>
+      ) : (
+        exp.map((experience, index) => (
+          <View
+            key={index}
             style={{
-              color: '#000000',
-              fontSize: 13,
-              fontWeight: '300',
-              width: 200,
+              flexDirection: 'row',
+              gap: 20,
+              marginBottom: 20,
             }}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum
-            erat orci, mollis nec gravida sed, ornare quis urna. Curabitur eu
-            lacus fringilla, vestibulum risus at.
-          </Text>
-        </View>
-      </View>
-      <View style={{display: 'flex', flexDirection: 'row', gap: 20}}>
-        <Image source={office} style={{width: 60, height: 60}} />
-        <View>
-          <Text style={{color: '#000000', fontSize: 25, fontWeight: '600'}}>
-            Engineer
-          </Text>
-          <Text style={{color: '#46505C', fontSize: 17, fontWeight: '500'}}>
-            Tokopedia
-          </Text>
-          <Text style={{color: '#9EA0A5', fontSize: 15, fontWeight: '500'}}>
-            July 2019 - January 2020
-          </Text>
-          <Text style={{color: '#9EA0A5', fontSize: 15, fontWeight: '500'}}>
-            6 months
-          </Text>
-          <Text
-            style={{
-              color: '#000000',
-              fontSize: 13,
-              fontWeight: '300',
-              width: 200,
-            }}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum
-            erat orci, mollis nec gravida sed, ornare quis urna. Curabitur eu
-            lacus fringilla, vestibulum risus at.
-          </Text>
-        </View>
-      </View>
-    </View>
+            <Image source={office} style={{width: 60, height: 60}} />
+            <View>
+              <Text
+                style={{
+                  color: '#000000',
+                  fontSize: 20,
+                  fontWeight: '600',
+                  width: 200,
+                }}>
+                {experience.position || 'Position:'}
+              </Text>
+              <Text style={{color: '#46505C', fontSize: 14, fontWeight: '500'}}>
+                {experience.company_name || 'Company:'}
+              </Text>
+              <Text style={{color: '#9EA0A5', fontSize: 14, fontWeight: '500'}}>
+                {experience.month_company || 'Month'}{' '}
+                {experience.year_company || 'Year'}
+              </Text>
+              <Text
+                style={{
+                  color: '#000000',
+                  fontSize: 14,
+                  fontWeight: '300',
+                  width: 180,
+                }}>
+                {experience.description_company || 'Description:'}
+              </Text>
+            </View>
+          </View>
+        ))
+      )}
+    </ScrollView>
   );
 
   return (

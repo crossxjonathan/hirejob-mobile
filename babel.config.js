@@ -16,5 +16,11 @@ module.exports = {
         verbose: false,
       },
     ],
+    [
+      'inline-import',
+      {
+        extensions: ['.svg'],
+      },
+    ],
   ],
 };
