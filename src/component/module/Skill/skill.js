@@ -1,9 +1,11 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import {View, Text, TextInput, Alert} from 'react-native';
 import React, {useEffect, useRef, useState} from 'react';
 import SmallButton from '../../base/button/smallbutton';
 import axios from 'axios';
 import {API_URL} from '@env';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import ReactAlert from '../alert/alert';
 
 const Skill = () => {
   const [skills, setSkills] = useState([]);
@@ -12,6 +14,18 @@ const Skill = () => {
   const [form, setForm] = useState({
     skill_name: '',
   });
+
+  const [alertVisible, setAlertVisible] = useState(false);
+  const [alertTitle, setAlertTitle] = useState('');
+  const [alertMessage, setAlertMessage] = useState('');
+  const [alertConfirmText, setAlertConfirmText] = useState('OK');
+
+  const showAlert = (title, message, confirmText) => {
+    setAlertTitle(title);
+    setAlertMessage(message);
+    setAlertConfirmText(confirmText);
+    setAlertVisible(true);
+  };
 
   const formRef = useRef(form);
   formRef.current = form;
@@ -36,13 +50,17 @@ const Skill = () => {
       const data = response.data;
       setSkills(prevSkills => [...prevSkills, data]);
       setForm({skill_name: ''});
-      Alert.alert('Add Skill Successfully!!');
+      showAlert('Success', 'Add Skill Successfully!!', 'Proceed');
     } catch (error) {
       console.error(
         'Error adding skill:',
         error.response?.data || error.message,
       );
-      Alert.alert('Error', error.response?.data?.message || error.message);
+      showAlert(
+        'Something Went Wrong!',
+        error.response?.data?.message || error.message,
+        'Try Again',
+      );
     }
   };
 
@@ -65,7 +83,11 @@ const Skill = () => {
         'Error fetching profile:',
         error.response?.data || error.message,
       );
-      Alert.alert('Error', error.response?.data?.message || error.message);
+      showAlert(
+        'Something Went Wrong!',
+        error.response?.data?.message || error.message,
+        'Try Again',
+      );
       setLoading(false);
       setError('Fetching Profile Failure');
     }
@@ -83,13 +105,17 @@ const Skill = () => {
         },
       });
       setSkills(prevSkills => prevSkills.filter(skill => skill.id !== id));
-      Alert.alert('Delete Skill Successfully!!');
+      showAlert('Success!!', 'Delete Skill Successfully!!', 'Proceed');
     } catch (error) {
       console.error(
         'Error deleting skill:',
         error.response?.data || error.message,
       );
-      Alert.alert('Error', error.response?.data?.message || error.message);
+      showAlert(
+        'Something Went Wrong!',
+        error.response?.data?.message || error.message,
+        'Try Again',
+      );
     }
   };
 
@@ -206,6 +232,14 @@ const Skill = () => {
           ))
         )}
       </View>
+      <ReactAlert
+        visible={alertVisible}
+        onClose={() => setAlertVisible(false)}
+        title={alertTitle}
+        message={alertMessage}
+        confirmText={alertConfirmText}
+        onConfirm={() => setAlertVisible(false)}
+      />
     </View>
   );
 };

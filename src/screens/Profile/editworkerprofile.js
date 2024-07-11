@@ -11,6 +11,7 @@ import Portfolio from '../../component/module/profile/worker/portfolio';
 import {API_URL} from '@env';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useNavigation} from '@react-navigation/native';
+import ReactAlert from '../../component/module/alert/alert';
 
 const EditWorkerProfile = () => {
   const navigation = useNavigation();
@@ -21,6 +22,18 @@ const EditWorkerProfile = () => {
     company: '',
     description: '',
   });
+
+  const [alertVisible, setAlertVisible] = useState(false);
+  const [alertTitle, setAlertTitle] = useState('');
+  const [alertMessage, setAlertMessage] = useState('');
+  const [alertConfirmText, setAlertConfirmText] = useState('OK');
+
+  const showAlert = (title, message, confirmText) => {
+    setAlertTitle(title);
+    setAlertMessage(message);
+    setAlertConfirmText(confirmText);
+    setAlertVisible(true);
+  };
 
   const formRef = useRef(form);
   formRef.current = form;
@@ -55,7 +68,8 @@ const EditWorkerProfile = () => {
     try {
       const token = await AsyncStorage.getItem('token');
       if (!token) {
-        Alert.alert('Error', 'No token found');
+        // Alert.alert('Error', 'No token found');
+        showAlert('Error', 'No token found', 'Proceed');
         return;
       }
 
@@ -77,15 +91,18 @@ const EditWorkerProfile = () => {
 
       if (response.status === 200 && response.data.status === 'Success') {
         navigation.navigate('ProfileWorker');
-        Alert.alert('Success', 'Profile updated successfully');
+        // Alert.alert('Success', 'Profile updated successfully');
+        showAlert('Success', 'Profile updated successfully', 'Proceed');
       } else {
         Alert.alert('Error', 'Failed to save data');
+        showAlert('Error', 'Failed to save data', 'Proceed');
       }
 
       console.log('Response from API:', response.data);
     } catch (error) {
       console.error('Error saving data:', error);
-      Alert.alert('Error', 'Failed to save data');
+      // Alert.alert('Error', 'Failed to save data');
+      showAlert('Error', 'Failed to save data', 'Proceed');
     }
   };
 
@@ -113,6 +130,14 @@ const EditWorkerProfile = () => {
         <View>
           <Portfolio />
         </View>
+        <ReactAlert
+          visible={alertVisible}
+          onClose={() => setAlertVisible(false)}
+          title={alertTitle}
+          message={alertMessage}
+          confirmText={alertConfirmText}
+          onConfirm={() => setAlertVisible(false)}
+        />
       </View>
     </ScrollView>
   );

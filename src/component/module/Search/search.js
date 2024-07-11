@@ -1,10 +1,15 @@
-import { View, TextInput, StyleSheet } from 'react-native';
+import {View, TextInput, StyleSheet} from 'react-native';
 import React from 'react';
 import RNPickerSelect from 'react-native-picker-select';
 import search from '../../../assets/image/icon/searchicon.png';
-import { Image } from 'react-native';
+import {Image} from 'react-native';
 
-const SearchContainer = ({ searchText, setSearchText, selectedValue, setSelectedValue }) => {
+const SearchContainer = ({
+  searchText,
+  setSearchText,
+  selectedValue,
+  setSelectedValue,
+}) => {
   return (
     <View style={styles.container}>
       <View style={styles.searchBox}>
@@ -18,10 +23,10 @@ const SearchContainer = ({ searchText, setSearchText, selectedValue, setSelected
         />
       </View>
       <RNPickerSelect
-        onValueChange={(value) => setSelectedValue(value)}
+        onValueChange={value => setSelectedValue(value)}
         items={[
-          { label: 'A - Z', value: 'asc' },
-          { label: 'Z - A', value: 'desc' },
+          {label: 'A - Z', value: 'asc'},
+          {label: 'Z - A', value: 'desc'},
         ]}
         placeholder={{
           label: 'Select sort',

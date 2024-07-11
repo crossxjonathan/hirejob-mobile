@@ -6,6 +6,7 @@ import {useNavigation} from '@react-navigation/native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {API_URL} from '@env';
+import ReactAlert from '../alert/alert';
 
 const TextLoginRecruiter = () => {
   const [form, setForm] = useState({
@@ -13,20 +14,32 @@ const TextLoginRecruiter = () => {
     password: '',
   });
 
+  const [alertVisible, setAlertVisible] = useState(false);
+  const [alertTitle, setAlertTitle] = useState('');
+  const [alertMessage, setAlertMessage] = useState('');
+  const [alertConfirmText, setAlertConfirmText] = useState('OK');
+
   const navigation = useNavigation();
+
+  const showAlert = (title, message, confirmText) => {
+    setAlertTitle(title);
+    setAlertMessage(message);
+    setAlertConfirmText(confirmText);
+    setAlertVisible(true);
+  };
 
   const handleLogin = async () => {
     try {
       const res = await axios.post(`${API_URL}/users/login`, form);
       console.log(res.data);
       const {data} = res.data;
-      Alert.alert('Welcome!!');
+      showAlert('Welcome!!', 'Login successful', 'Proceed');
       await AsyncStorage.setItem('token', data.token);
       navigation.navigate('RecruiterTab');
     } catch (error) {
       const messageErr = error.response;
       console.log(messageErr);
-      Alert.alert('Something Wrong!!');
+      showAlert('Something Went Wrong!', messageErr, 'Try Again');
     }
   };
 
@@ -75,6 +88,14 @@ const TextLoginRecruiter = () => {
           </Text>
         </Text>
       </View>
+      <ReactAlert
+        visible={alertVisible}
+        onClose={() => setAlertVisible(false)}
+        title={alertTitle}
+        message={alertMessage}
+        confirmText={alertConfirmText}
+        onConfirm={() => setAlertVisible(false)}
+      />
     </View>
   );
 };

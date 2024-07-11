@@ -1,14 +1,13 @@
 import React, {useEffect, useState} from 'react';
 import {View, TouchableOpacity, StyleSheet, Image} from 'react-native';
-import {
-  ChatIcon,
-  MenuIcon,
-  ProfileIcon,
-  SearchIcon,
-} from '../../../assets/image/icon';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import {API_URL} from '@env';
+
+const ChatIcon = require('../../../assets/image/icon/chat.png');
+const MenuIcon = require('../../../assets/image/icon/menu.png');
+const ProfileIcon = require('../../../assets/image/icon/pngwing.com.png');
+const SearchIcon = require('../../../assets/image/icon/searchicon.png');
 
 function FootBar({state, descriptors, navigation}) {
   const [profileImage, setProfileImage] = useState(null);
@@ -33,6 +32,52 @@ function FootBar({state, descriptors, navigation}) {
 
     fetchProfileImage();
   }, []);
+
+  const renderIcon = (label, isFocused) => {
+    const iconStyle = [styles.icon, label === 'Profile' && styles.profileIcon];
+
+    switch (label) {
+      case 'Home':
+        return (
+          <Image
+            source={MenuIcon}
+            style={[iconStyle, {tintColor: isFocused ? '#673ab7' : '#aaaaaa'}]}
+          />
+        );
+      case 'Search':
+        return (
+          <Image
+            source={SearchIcon}
+            style={[iconStyle, {tintColor: isFocused ? '#673ab7' : '#aaaaaa'}]}
+          />
+        );
+      case 'Chat':
+        return (
+          <Image
+            source={ChatIcon}
+            style={[iconStyle, {tintColor: isFocused ? '#673ab7' : '#aaaaaa'}]}
+          />
+        );
+      case 'Profile':
+        return (
+          <View style={styles.profileIconContainer}>
+            {profileImage ? (
+              <Image source={{uri: profileImage}} style={styles.profileImage} />
+            ) : (
+              <Image
+                source={ProfileIcon}
+                style={[
+                  iconStyle,
+                  {tintColor: isFocused ? '#673ab7' : '#aaaaaa'},
+                ]}
+              />
+            )}
+          </View>
+        );
+      default:
+        return null;
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -66,54 +111,6 @@ function FootBar({state, descriptors, navigation}) {
           });
         };
 
-        const Icon = () => {
-          const iconStyle = [
-            styles.icon,
-            label === 'Profile' && styles.profileIcon,
-          ];
-          if (label === 'Home') {
-            return (
-              <MenuIcon
-                fill={isFocused ? '#673ab7' : '#aaaaaa'}
-                style={iconStyle}
-              />
-            );
-          }
-          if (label === 'Search') {
-            return (
-              <SearchIcon
-                fill={isFocused ? '#673ab7' : '#aaaaaa'}
-                style={iconStyle}
-              />
-            );
-          }
-          if (label === 'Chat') {
-            return (
-              <ChatIcon
-                fill={isFocused ? '#673ab7' : '#aaaaaa'}
-                style={iconStyle}
-              />
-            );
-          }
-          if (label === 'Profile') {
-            return (
-              <View style={styles.profileIconContainer}>
-                {profileImage ? (
-                  <Image
-                    source={{uri: profileImage}}
-                    style={styles.profileImage}
-                  />
-                ) : (
-                  <ProfileIcon
-                    fill={isFocused ? '#673ab7' : '#aaaaaa'}
-                    style={iconStyle}
-                  />
-                )}
-              </View>
-            );
-          }
-        };
-
         return (
           <TouchableOpacity
             key={route.key}
@@ -124,7 +121,7 @@ function FootBar({state, descriptors, navigation}) {
             onPress={onPress}
             onLongPress={onLongPress}
             style={styles.tabButton}>
-            <Icon />
+            {renderIcon(label, isFocused)}
           </TouchableOpacity>
         );
       })}

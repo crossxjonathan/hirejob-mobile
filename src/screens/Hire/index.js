@@ -6,22 +6,33 @@ import axios from 'axios';
 import {API_URL} from '@env';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useNavigation} from '@react-navigation/native';
-import {jwtDecode} from 'jwt-decode';
+import ReactAlert from '../../component/module/alert/alert';
 
-const HireWorker = () => {
+const HireWorker = ({route}) => {
   const [hire, setHire] = useState({});
   const [loading, setLoading] = useState(false);
   const navigation = useNavigation();
+  const id = route.params?.id;
+
+  const [alertVisible, setAlertVisible] = useState(false);
+  const [alertTitle, setAlertTitle] = useState('');
+  const [alertMessage, setAlertMessage] = useState('');
+  const [alertConfirmText, setAlertConfirmText] = useState('OK');
+
+  const showAlert = (title, message, confirmText) => {
+    setAlertTitle(title);
+    setAlertMessage(message);
+    setAlertConfirmText(confirmText);
+    setAlertVisible(true);
+  };
 
   const handleAddHire = async form => {
     try {
       setLoading(true);
       const token = await AsyncStorage.getItem('token');
-      const decodedToken = jwtDecode(token);
-      const workers_id = decodedToken.sub;
-      console.log(token, '<<<<<<<<<<<<<<<<<<<<<<<<token');
-      console.log(decodedToken, '<<<<<<<<<<<<<<<<<<<<<<<<decoded');
-      console.log(workers_id, '<<<<<<<<<<<<<<<<<<<<<<<<workers_id');
+      const workers_id = id;
+      // console.log(token, '<<<<<<<<<<<<<<<<<<<<<<<<token');
+      // console.log(workers_id, '<<<<<<<<<<<<<<<<<<<<<<<<workers_id');
       const formData = {...form, workers_id};
       console.log(formData, '<<<<<<<<<<<<<<<<<<<<<<<<formData');
 
@@ -32,18 +43,28 @@ const HireWorker = () => {
       });
       const data = res.data.data;
       setHire({...hire, data});
-      console.log(res, '<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<res');
-      console.log(data, '<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<res');
+      // console.log(res, '<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<res');
+      // console.log(data, '<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<res');
       setLoading(false);
-      Alert.alert('Success', 'Hiring request submitted successfully!');
+      showAlert(
+        'Success',
+        'Hiring request submitted successfully!!',
+        'Proceed',
+      );
+      // Alert.alert('Success', 'Hiring request submitted successfully!');
       navigation.goBack('');
     } catch (error) {
       setLoading(false);
-      console.error('Error adding hire:', error);
-      Alert.alert(
+      console.error('Error adding hire:', error.response);
+      showAlert(
         'Error',
         'Failed to submit hiring request. Please try again.',
+        'Proceed',
       );
+      // Alert.alert(
+      //   'Error',
+      //   'Failed to submit hiring request. Please try again.',
+      // );
     }
   };
 
@@ -62,6 +83,14 @@ const HireWorker = () => {
         <View style={styles.hireContainer}>
           <HireTextWorker handleAddHire={handleAddHire} loading={loading} />
         </View>
+        <ReactAlert
+          visible={alertVisible}
+          onClose={() => setAlertVisible(false)}
+          title={alertTitle}
+          message={alertMessage}
+          confirmText={alertConfirmText}
+          onConfirm={() => setAlertVisible(false)}
+        />
       </View>
     </ScrollView>
   );
@@ -99,7 +128,7 @@ const styles = StyleSheet.create({
     color: '#858D96',
   },
   hireContainer: {
-    paddingTop: 20,
+    paddingTop: 0,
   },
 });
 

@@ -4,7 +4,8 @@ import Input from '../../base/text/input';
 import LargeButton from '../../base/button/largebutton';
 import {useNavigation} from '@react-navigation/native';
 import axios from 'axios';
-import { API_URL } from '@env';
+import {API_URL} from '@env';
+import ReactAlert from '../alert/alert';
 
 const TextRegisterWorker = () => {
   const [form, setForm] = useState({
@@ -15,22 +16,36 @@ const TextRegisterWorker = () => {
     confirm: '',
   });
 
+  const [alertVisible, setAlertVisible] = useState(false);
+  const [alertTitle, setAlertTitle] = useState('');
+  const [alertMessage, setAlertMessage] = useState('');
+  const [alertConfirmText, setAlertConfirmText] = useState('OK');
+
   const navigation = useNavigation();
+
+  const showAlert = (title, message, confirmText) => {
+    setAlertTitle(title);
+    setAlertMessage(message);
+    setAlertConfirmText(confirmText);
+    setAlertVisible(true);
+  };
 
   const handleRegister = async () => {
     if (form.password !== form.confirm) {
-      Alert.alert('Passwords do not match!');
+      showAlert('Password not match!!', 'Please try again');
       return;
     }
 
     try {
       const res = await axios.post(`${API_URL}/users/register/workers`, form);
       console.log(res.data);
+      showAlert('Success!!', 'Register Worker Successfully!!', 'Proceed');
       navigation.navigate('LoginWorker');
     } catch (error) {
-      const messageErr = error.response?.data?.message || 'Something went wrong!';
+      const messageErr =
+        error.response?.data?.message || 'Something went wrong!';
       console.log(error);
-      Alert.alert(messageErr);
+      showAlert('Something Went Wrong!', messageErr, 'Try Again');
     }
   };
 
@@ -111,6 +126,14 @@ const TextRegisterWorker = () => {
           </Text>
         </Text>
       </View>
+      <ReactAlert
+        visible={alertVisible}
+        onClose={() => setAlertVisible(false)}
+        title={alertTitle}
+        message={alertMessage}
+        confirmText={alertConfirmText}
+        onConfirm={() => setAlertVisible(false)}
+      />
     </View>
   );
 };

@@ -1,4 +1,4 @@
-import {View, Text, Alert} from 'react-native';
+import {View, Text} from 'react-native';
 import React, {useState} from 'react';
 import Input from '../../base/text/input';
 import LargeButton from '../../base/button/largebutton';
@@ -6,21 +6,32 @@ import {useNavigation} from '@react-navigation/native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {API_URL} from '@env';
+import ReactAlert from '../alert/alert';
 
 const TextLoginWorker = () => {
   const [form, setForm] = useState({
     email: '',
     password: '',
   });
+  const [alertVisible, setAlertVisible] = useState(false);
+  const [alertTitle, setAlertTitle] = useState('');
+  const [alertMessage, setAlertMessage] = useState('');
+  const [alertConfirmText, setAlertConfirmText] = useState('OK');
 
   const navigation = useNavigation();
+
+  const showAlert = (title, message, confirmText) => {
+    setAlertTitle(title);
+    setAlertMessage(message);
+    setAlertConfirmText(confirmText);
+    setAlertVisible(true);
+  };
 
   const handleLogin = async () => {
     try {
       const res = await axios.post(`${API_URL}/users/login`, form);
-      console.log(res.data, '<<<<<<<<<<<<<<<<<<<<<<<res.data');
       const {data} = res.data;
-      Alert.alert('Welcome!!');
+      showAlert('Welcome!!', 'Login successful', 'Proceed');
       await AsyncStorage.setItem('token', data.token);
 
       const roleRes = await axios.get(`${API_URL}/users/check-role`, {
@@ -38,8 +49,7 @@ const TextLoginWorker = () => {
       }
     } catch (error) {
       const messageErr = error.response;
-      console.log(messageErr);
-      Alert.alert('Something Wrong!!');
+      showAlert('Something Went Wrong!', messageErr, 'Try Again');
     }
   };
 
@@ -88,6 +98,14 @@ const TextLoginWorker = () => {
           </Text>
         </Text>
       </View>
+      <ReactAlert
+        visible={alertVisible}
+        onClose={() => setAlertVisible(false)}
+        title={alertTitle}
+        message={alertMessage}
+        confirmText={alertConfirmText}
+        onConfirm={() => setAlertVisible(false)}
+      />
     </View>
   );
 };
