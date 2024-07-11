@@ -13,6 +13,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useNavigation} from '@react-navigation/native';
 import MainRecruiterProfile from '../../component/module/profile/recruiter/recruiter';
 import PersonalDataRecruiter from '../../component/module/profile/recruiter/personaldatarecruiter';
+import ReactAlert from '../../component/module/alert/alert';
 
 const EditRecruiterProfile = ({id}) => {
   const navigation = useNavigation();
@@ -25,6 +26,18 @@ const EditRecruiterProfile = ({id}) => {
     phone: '',
     instagram: '',
   });
+
+  const [alertVisible, setAlertVisible] = useState(false);
+  const [alertTitle, setAlertTitle] = useState('');
+  const [alertMessage, setAlertMessage] = useState('');
+  const [alertConfirmText, setAlertConfirmText] = useState('OK');
+
+  const showAlert = (title, message, confirmText) => {
+    setAlertTitle(title);
+    setAlertMessage(message);
+    setAlertConfirmText(confirmText);
+    setAlertVisible(true);
+  };
 
   const formRef = useRef(form);
   formRef.current = form;
@@ -51,7 +64,12 @@ const EditRecruiterProfile = ({id}) => {
         });
       } catch (error) {
         console.error('Error fetching data:', error);
-        Alert.alert('Error', 'Failed to fetch data');
+        // Alert.alert('Error', 'Failed to fetch data');
+        showAlert(
+          'Failed to fetch data!',
+          error.response?.data?.message || error.message,
+          'Try Again',
+        );
       }
     };
     fetchData();
@@ -61,7 +79,8 @@ const EditRecruiterProfile = ({id}) => {
     try {
       const token = await AsyncStorage.getItem('token');
       if (!token) {
-        Alert.alert('Error', 'No token found');
+        // Alert.alert('Error', 'No token found');
+        showAlert('Error', 'No token found', 'Proceed');
         return;
       }
 
@@ -89,15 +108,18 @@ const EditRecruiterProfile = ({id}) => {
 
       if (response.status === 200 && response.data.status === 'Success') {
         navigation.navigate('ProfileRecruiter');
-        Alert.alert('Success', 'Profile updated successfully');
+        // Alert.alert('Success', 'Profile updated successfully');
+        showAlert('Success', 'Profile updated successfully', 'Proceed');
       } else {
-        Alert.alert('Error', 'Failed to save data');
+        // Alert.alert('Error', 'Failed to save data');
+        showAlert('Error', 'Failed to save data', 'Proceed');
       }
 
       console.log('Response from API:', response.data);
     } catch (error) {
       console.error('Error saving data:', error);
-      Alert.alert('Error', 'Failed to save data');
+      // Alert.alert('Error', 'Failed to save data');
+      showAlert('Error', 'Failed to save data', 'Proceed');
     }
   };
 
@@ -116,6 +138,14 @@ const EditRecruiterProfile = ({id}) => {
         <View>
           <PersonalDataRecruiter form={form} setForm={setForm} />
         </View>
+        <ReactAlert
+          visible={alertVisible}
+          onClose={() => setAlertVisible(false)}
+          title={alertTitle}
+          message={alertMessage}
+          confirmText={alertConfirmText}
+          onConfirm={() => setAlertVisible(false)}
+        />
         {/* <View>
           <Skill />
         </View>

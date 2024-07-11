@@ -16,6 +16,8 @@ import {API_URL} from '@env';
 import {useNavigation} from '@react-navigation/native';
 
 const HistoryWorker = () => {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
   const Navigation = useNavigation();
   const [hire, setHire] = useState([]);
 

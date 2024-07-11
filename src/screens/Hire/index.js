@@ -6,12 +6,25 @@ import axios from 'axios';
 import {API_URL} from '@env';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useNavigation} from '@react-navigation/native';
+import ReactAlert from '../../component/module/alert/alert';
 
 const HireWorker = ({route}) => {
   const [hire, setHire] = useState({});
   const [loading, setLoading] = useState(false);
   const navigation = useNavigation();
-  const id = route.params?.id
+  const id = route.params?.id;
+
+  const [alertVisible, setAlertVisible] = useState(false);
+  const [alertTitle, setAlertTitle] = useState('');
+  const [alertMessage, setAlertMessage] = useState('');
+  const [alertConfirmText, setAlertConfirmText] = useState('OK');
+
+  const showAlert = (title, message, confirmText) => {
+    setAlertTitle(title);
+    setAlertMessage(message);
+    setAlertConfirmText(confirmText);
+    setAlertVisible(true);
+  };
 
   const handleAddHire = async form => {
     try {
@@ -33,15 +46,25 @@ const HireWorker = ({route}) => {
       // console.log(res, '<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<res');
       // console.log(data, '<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<res');
       setLoading(false);
-      Alert.alert('Success', 'Hiring request submitted successfully!');
+      showAlert(
+        'Success',
+        'Hiring request submitted successfully!!',
+        'Proceed',
+      );
+      // Alert.alert('Success', 'Hiring request submitted successfully!');
       navigation.goBack('');
     } catch (error) {
       setLoading(false);
       console.error('Error adding hire:', error.response);
-      Alert.alert(
+      showAlert(
         'Error',
         'Failed to submit hiring request. Please try again.',
+        'Proceed',
       );
+      // Alert.alert(
+      //   'Error',
+      //   'Failed to submit hiring request. Please try again.',
+      // );
     }
   };
 
@@ -60,6 +83,14 @@ const HireWorker = ({route}) => {
         <View style={styles.hireContainer}>
           <HireTextWorker handleAddHire={handleAddHire} loading={loading} />
         </View>
+        <ReactAlert
+          visible={alertVisible}
+          onClose={() => setAlertVisible(false)}
+          title={alertTitle}
+          message={alertMessage}
+          confirmText={alertConfirmText}
+          onConfirm={() => setAlertVisible(false)}
+        />
       </View>
     </ScrollView>
   );

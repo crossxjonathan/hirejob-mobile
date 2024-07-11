@@ -5,6 +5,7 @@ import LargeButton from '../../base/button/largebutton';
 import {useNavigation} from '@react-navigation/native';
 import axios from 'axios';
 import {API_URL} from '@env';
+import ReactAlert from '../alert/alert';
 
 const TextRegisterRecruiter = () => {
   const [form, setForm] = useState({
@@ -17,11 +18,23 @@ const TextRegisterRecruiter = () => {
     confirm: '',
   });
 
+  const [alertVisible, setAlertVisible] = useState(false);
+  const [alertTitle, setAlertTitle] = useState('');
+  const [alertMessage, setAlertMessage] = useState('');
+  const [alertConfirmText, setAlertConfirmText] = useState('OK');
+
   const navigation = useNavigation();
+
+  const showAlert = (title, message, confirmText) => {
+    setAlertTitle(title);
+    setAlertMessage(message);
+    setAlertConfirmText(confirmText);
+    setAlertVisible(true);
+  };
 
   const handleRegister = async () => {
     if (form.password !== form.confirm) {
-      Alert.alert('Passwords do not match!');
+      showAlert('Password not match!!', 'Please try again');
       return;
     }
 
@@ -31,12 +44,13 @@ const TextRegisterRecruiter = () => {
         form,
       );
       console.log(res.data);
+      showAlert('Success!!', 'Register Recruiter Successfully!!', 'Proceed');
       navigation.navigate('LoginRecruiter');
     } catch (error) {
       const messageErr =
         error.response?.data?.message || 'Something went wrong!';
       console.log(error);
-      Alert.alert(messageErr);
+      showAlert('Something Went Wrong!', messageErr, 'Try Again');
     }
   };
 
@@ -139,6 +153,14 @@ const TextRegisterRecruiter = () => {
           </Text>
         </Text>
       </View>
+      <ReactAlert
+        visible={alertVisible}
+        onClose={() => setAlertVisible(false)}
+        title={alertTitle}
+        message={alertMessage}
+        confirmText={alertConfirmText}
+        onConfirm={() => setAlertVisible(false)}
+      />
     </View>
   );
 };

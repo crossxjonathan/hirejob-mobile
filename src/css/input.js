@@ -17,8 +17,8 @@ export default StyleSheet.create({
     backgroundColor: '#ffffff',
   },
   textinput: {
-    height: 150,
-    width: 330,
+    height: 50,
+    width: 300,
     borderColor: 'gray',
     borderWidth: 1,
     borderRadius: 4,
@@ -28,7 +28,7 @@ export default StyleSheet.create({
     backgroundColor: '#ffffff',
   },
   TextField: {
-    width: 260,
+    width: 300,
     height: 100,
     borderColor: 'gray',
     color: '#000000',

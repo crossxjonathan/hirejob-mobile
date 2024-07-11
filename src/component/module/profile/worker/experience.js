@@ -129,7 +129,7 @@ const Experience = () => {
           borderBottomWidth: 1,
         }}
       />
-      <View style={{padding: 20}}>
+      <View style={{padding: 10}}>
         <Text style={{color: '#aaaaaa', fontWeight: '600', paddingLeft: 10}}>
           Position
         </Text>
@@ -141,7 +141,7 @@ const Experience = () => {
           />
         </View>
       </View>
-      <View style={{padding: 20}}>
+      <View style={{padding: 10}}>
         <Text style={{color: '#aaaaaa', fontWeight: '600', paddingLeft: 10}}>
           Company Name
         </Text>
@@ -153,7 +153,7 @@ const Experience = () => {
           />
         </View>
       </View>
-      <View style={{padding: 20}}>
+      <View style={{padding: 10}}>
         <Text style={{color: '#aaaaaa', fontWeight: '600', paddingLeft: 10}}>
           Month
         </Text>
@@ -165,7 +165,7 @@ const Experience = () => {
           />
         </View>
       </View>
-      <View style={{padding: 20}}>
+      <View style={{padding: 10}}>
         <Text style={{color: '#aaaaaa', fontWeight: '600', paddingLeft: 10}}>
           Year
         </Text>
@@ -177,7 +177,7 @@ const Experience = () => {
           />
         </View>
       </View>
-      <View style={{padding: 20}}>
+      <View style={{padding: 10}}>
         <Text style={{color: '#aaaaaa', fontWeight: '600', paddingLeft: 10}}>
           Description
         </Text>
