@@ -6,22 +6,20 @@ import axios from 'axios';
 import {API_URL} from '@env';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useNavigation} from '@react-navigation/native';
-import {jwtDecode} from 'jwt-decode';
 
-const HireWorker = () => {
+const HireWorker = ({route}) => {
   const [hire, setHire] = useState({});
   const [loading, setLoading] = useState(false);
   const navigation = useNavigation();
+  const id = route.params?.id
 
   const handleAddHire = async form => {
     try {
       setLoading(true);
       const token = await AsyncStorage.getItem('token');
-      const decodedToken = jwtDecode(token);
-      const workers_id = decodedToken.sub;
-      console.log(token, '<<<<<<<<<<<<<<<<<<<<<<<<token');
-      console.log(decodedToken, '<<<<<<<<<<<<<<<<<<<<<<<<decoded');
-      console.log(workers_id, '<<<<<<<<<<<<<<<<<<<<<<<<workers_id');
+      const workers_id = id;
+      // console.log(token, '<<<<<<<<<<<<<<<<<<<<<<<<token');
+      // console.log(workers_id, '<<<<<<<<<<<<<<<<<<<<<<<<workers_id');
       const formData = {...form, workers_id};
       console.log(formData, '<<<<<<<<<<<<<<<<<<<<<<<<formData');
 
@@ -32,14 +30,14 @@ const HireWorker = () => {
       });
       const data = res.data.data;
       setHire({...hire, data});
-      console.log(res, '<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<res');
-      console.log(data, '<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<res');
+      // console.log(res, '<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<res');
+      // console.log(data, '<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<res');
       setLoading(false);
       Alert.alert('Success', 'Hiring request submitted successfully!');
       navigation.goBack('');
     } catch (error) {
       setLoading(false);
-      console.error('Error adding hire:', error);
+      console.error('Error adding hire:', error.response);
       Alert.alert(
         'Error',
         'Failed to submit hiring request. Please try again.',
@@ -99,7 +97,7 @@ const styles = StyleSheet.create({
     color: '#858D96',
   },
   hireContainer: {
-    paddingTop: 20,
+    paddingTop: 0,
   },
 });
 

@@ -47,7 +47,7 @@ const WorkerProfileDetail = () => {
   };
 
   const handleHire = () => {
-    navigation.navigate('HireWorker');
+    navigation.navigate('HireWorker', {id: profile.id});
   };
 
   useEffect(() => {

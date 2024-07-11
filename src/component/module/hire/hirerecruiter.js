@@ -1,7 +1,8 @@
-import {View, Text, Alert, StyleSheet, TextInput} from 'react-native';
+import {View, Text, Alert, StyleSheet} from 'react-native';
 import React, {useState} from 'react';
 import Input from '../../base/text/input';
 import LargeButton from '../../base/button/largebutton';
+import Textinput from '../../base/text/textinput';
 
 const HireTextWorker = ({handleAddHire, loading}) => {
   const [form, setForm] = useState({
@@ -63,12 +64,11 @@ const HireTextWorker = ({handleAddHire, loading}) => {
       </View>
       <View style={styles.inputContainer}>
         <Text style={styles.label}>Description</Text>
-        <TextInput
+        <Textinput
           onChangeText={value => setForm({...form, description: value})}
           value={form.description}
           placeholder="Enter Your Description..."
           placeholderTextColor="#999999"
-          style={styles.textField}
           multiline={true}
           numberOfLines={4}
         />
@@ -90,21 +90,12 @@ const styles = StyleSheet.create({
   label: {
     color: 'gray',
     marginBottom: 10,
-    marginLeft: 10,
-  },
-  textField: {
-    height: 150,
-    width: '100%',
-    borderColor: 'gray',
-    borderWidth: 1,
-    borderRadius: 5,
-    paddingHorizontal: 10,
-    color: '#000000',
-    backgroundColor: '#ffffff',
-    textAlignVertical: 'top',
+    position: 'relative',
+    right: 10,
   },
   buttonContainer: {
     paddingTop: 30,
+    alignItems: 'center',
   },
 });
 
