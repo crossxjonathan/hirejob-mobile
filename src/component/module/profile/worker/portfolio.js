@@ -19,9 +19,9 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {launchImageLibrary} from 'react-native-image-picker';
 import ImageResizer from 'react-native-image-resizer';
-import image1 from '../../../../assets/image/bg/Rectangle637.png';
+// import image1 from '../../../../assets/image/bg/Rectangle637.png';
 import MediumTransparentRed from '../../../base/button/mediumtransparentred';
-import MediumTransparentBlue from '../../../base/button/mediumtransparentblue';
+// import MediumTransparentBlue from '../../../base/button/mediumtransparentblue';
 
 const Portfolio = () => {
   const [port, setPort] = useState([]);
