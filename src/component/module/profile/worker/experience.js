@@ -10,6 +10,7 @@ import {useNavigation} from '@react-navigation/native';
 import office from '../../../../assets/image/icon/office.png';
 import MediumTransparentRed from '../../../base/button/mediumtransparentred';
 import SmallButtonRed from '../../../base/button/smallbuttonred';
+import ReactAlert from '../../alert/alert';
 
 const Experience = () => {
   const [exp, setExp] = useState([]);
@@ -24,6 +25,18 @@ const Experience = () => {
 
   const handleChange = (name, value) => {
     setForm({...form, [name]: value});
+  };
+
+  const [alertVisible, setAlertVisible] = useState(false);
+  const [alertTitle, setAlertTitle] = useState('');
+  const [alertMessage, setAlertMessage] = useState('');
+  const [alertConfirmText, setAlertConfirmText] = useState('OK');
+
+  const showAlert = (title, message, confirmText) => {
+    setAlertTitle(title);
+    setAlertMessage(message);
+    setAlertConfirmText(confirmText);
+    setAlertVisible(true);
   };
 
   const formRef = useRef(form);
@@ -48,7 +61,8 @@ const Experience = () => {
       });
       const data = res.data;
       navigation.navigate('ProfileWorker');
-      Alert.alert('Add Experience Successfully!!');
+      // Alert.alert('Add Experience Successfully!!');
+      showAlert('Success', 'Add Experience Successfully!!', 'Proceed');
       console.log(data, '<<<<<<<<<<<<<<<<<data experience');
     } catch (error) {
       console.log(error);
@@ -67,18 +81,22 @@ const Experience = () => {
       const data = res.data;
       setExp(prevExp => prevExp.filter(experience => experience.id !== id));
       console.log(data, '<<<<<<<<<<<<<delete');
-      Alert.alert('Delete experience Successfully!!');
+      showAlert('Success', 'Delete experience Successfully!!', 'Proceed');
+      // Alert.alert('Delete experience Successfully!!');
     } catch (error) {
       if (error.response) {
         console.log('Server responded with:', error.response.status);
         console.log(error.response.data);
-        Alert.alert('Error', `Server responded with: ${error.response.status}`);
+        showAlert('Something Went Wrong!', error.response.status, 'Try Again');
+        // Alert.alert('Error', `Server responded with: ${error.response.status}`);
       } else if (error.request) {
         console.log('No response received:', error.request);
-        Alert.alert('Error', 'No response received from the server.');
+        showAlert('Error!', error.request, 'Try Again');
+        // Alert.alert('Error', 'No response received from the server.');
       } else {
         console.log('Error:', error.message);
-        Alert.alert('Error', `An error occurred: ${error.message}`);
+        showAlert('Error!', error.message, 'Try Again');
+        // Alert.alert('Error', `An error occurred: ${error.message}`);
       }
     }
   };
@@ -239,6 +257,14 @@ const Experience = () => {
                 />
               </View>
             </View>
+            <ReactAlert
+              visible={alertVisible}
+              onClose={() => setAlertVisible(false)}
+              title={alertTitle}
+              message={alertMessage}
+              confirmText={alertConfirmText}
+              onConfirm={() => setAlertVisible(false)}
+            />
           </View>
         ))}
       </ScrollView>
