@@ -69,10 +69,10 @@ const Portfolio = () => {
       const token = await AsyncStorage.getItem('token');
 
       const payload = {
-        application_name: formRef.current.appName,
-        link_repository: formRef.current.linkRepository,
-        type_portfolio: formRef.current.portfolioType,
-        upload_image: formRef.current.photo,
+        application_name: form.appName,
+        link_repository: form.linkRepository,
+        type_portfolio: form.portfolioType,
+        upload_image: form.photo,
       };
 
       const resPortfolio = await axios.post(`${API_URL}/portfolio`, payload, {
@@ -84,26 +84,30 @@ const Portfolio = () => {
       const portfolioData = resPortfolio.data;
       console.log(portfolioData, '<<<<<<<<<<<<<<<<<data portfolio');
 
-      if (portfolioData && formRef.current.photo) {
-        const formData = new FormData();
-        formData.append('photo', {
-          uri: formRef.current.photo,
-          type: 'image/jpeg',
-          name: 'portfolio.jpg',
-        });
+      if (portfolioData) {
+        if (form.photo) {
+          const formData = new FormData();
+          formData.append('photo', {
+            uri: form.photo,
+            type: 'image/jpeg',
+            name: 'portfolio.jpg',
+          });
 
-        const resImage = await axios.post(`${API_URL}/upload`, formData, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'multipart/form-data',
-          },
-        });
+          const resImage = await axios.post(`${API_URL}/upload`, formData, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              'Content-Type': 'multipart/form-data',
+            },
+          });
 
-        const imageData = resImage.data;
-        console.log(imageData, '<<<<<<<<<<<<<<<<<data portfolio image');
-        Alert.alert('Success', 'Portfolio and Image Uploaded Successfully!');
+          const imageData = resImage.data;
+          console.log(imageData, '<<<<<<<<<<<<<<<<<data portfolio image');
+          Alert.alert('Success', 'Portfolio and Image Uploaded Successfully!');
+        } else {
+          Alert.alert('Success', 'Portfolio added successfully!');
+        }
       } else {
-        Alert.alert('Success', 'Portfolio added, but no image to upload.');
+        Alert.alert('Error', 'Failed to add portfolio. Please try again.');
       }
     } catch (error) {
       if (error.response) {
@@ -119,6 +123,7 @@ const Portfolio = () => {
       }
     }
   };
+
 
   const handleDeletePortfolio = async id => {
     try {
@@ -287,10 +292,6 @@ const Portfolio = () => {
       </View>
       <ScrollView style={{padding: 20}}>
         {port.map((item, index) => {
-          const imageUrl = item.upload_image?.data
-            ? bufferToString(item.upload_image.data)
-            : null;
-
           return (
             <View
               key={index}
@@ -301,7 +302,7 @@ const Portfolio = () => {
                 alignItems: 'center',
               }}>
               <Image
-                source={imageUrl ? {uri: imageUrl} : image1}
+                source={{uri: item.upload_image}}
                 style={{
                   width: 250,
                   height: 300,

@@ -69,10 +69,6 @@ const WorkerOption = () => {
     fetchData('portfolio', setPort);
   }, [id]);
 
-  const bufferToString = buffer => {
-    return String.fromCharCode.apply(null, new Uint8Array(buffer));
-  };
-
   const renderPortfolio = () => (
     <ScrollView style={{padding: 20}}>
       {loading ? (
@@ -106,36 +102,30 @@ const WorkerOption = () => {
           No Portfolio Found
         </Text>
       ) : (
-        port.map((portfolio, index) => {
-          const imageUrl = portfolio.upload_image?.data
-            ? bufferToString(portfolio.upload_image.data)
-            : null;
-
-          return (
-            <View key={index} style={{marginBottom: 20}}>
-              <Image
-                source={imageUrl ? {uri: imageUrl} : image1}
-                style={{
-                  width: 250,
-                  height: 300,
-                  borderRadius: 10,
-                  borderWidth: 2,
-                  borderColor: '#FBB017',
-                  marginBottom: 10,
-                }}
-              />
-              <Text style={{color: 'black', fontSize: 18, fontWeight: '600'}}>
-                {portfolio.application_name || 'application_name:'}
-              </Text>
-              <Text style={{color: 'black', fontSize: 15, fontWeight: '500'}}>
-                {portfolio.type_portfolio || 'type_portfolio:'}
-              </Text>
-              <Text style={{color: '#FBB017', fontSize: 13, fontWeight: '400'}}>
-                {portfolio.link_repository || 'link_repository:'}
-              </Text>
-            </View>
-          );
-        })
+        port.map((portfolio, index) => (
+          <View key={index} style={{marginBottom: 20}}>
+            <Image
+              source={{uri: portfolio.upload_image}}
+              style={{
+                width: 250,
+                height: 300,
+                borderRadius: 10,
+                borderWidth: 2,
+                borderColor: '#FBB017',
+                marginBottom: 10,
+              }}
+            />
+            <Text style={{color: 'black', fontSize: 18, fontWeight: '600'}}>
+              {portfolio.application_name || 'application_name:'}
+            </Text>
+            <Text style={{color: 'black', fontSize: 15, fontWeight: '500'}}>
+              {portfolio.type_portfolio || 'type_portfolio:'}
+            </Text>
+            <Text style={{color: '#FBB017', fontSize: 13, fontWeight: '400'}}>
+              {portfolio.link_repository || 'link_repository:'}
+            </Text>
+          </View>
+        ))
       )}
     </ScrollView>
   );

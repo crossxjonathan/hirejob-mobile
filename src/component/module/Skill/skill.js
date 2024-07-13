@@ -76,6 +76,7 @@ const Skill = () => {
         },
       });
       setSkills(res.data.data);
+      console.log(res, '<<<<<<<<<<<<<<<<<<<<<<<res');
       setLoading(false);
       setError('');
     } catch (error) {
