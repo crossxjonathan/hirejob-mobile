@@ -129,7 +129,7 @@ setup server:
     <p>Edit Profile Recruiter</p>   
     <img src="./src/assets/image/portfolio/personalRecruiter.png">   
     <p>Hire</p>    
-    <img src="./src/assets/image/portfolio/hireworkers.jpg">   
+    <img src="./src/assets/image/portfolio/hireworkers.png">   
     <p>History</p>    
     <img src="./src/assets/image/portfolio/historyHire.png">   
 </div>
