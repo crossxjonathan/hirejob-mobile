@@ -1,79 +1,158 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+<p align="center">
+  <img src="./src/assets/image/logo/purple.png" alt="Logo">
+</p>
 
-# Getting Started
+<h1 align="center">
+    <a href="https://git.io/typing-svg"><img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=25&pause=1000&color=5E50A1&width=435&lines=Peworld+Mobile+Application" alt="Typing SVG" /></a>
+</h1>
 
->**Note**: Make sure you have completed the [React Native - Environment Setup](https://reactnative.dev/docs/environment-setup) instructions till "Creating a new application" step, before proceeding.
+## Table of Contents
 
-## Step 1: Start the Metro Server
+- [Introduction](#introduction)
+- [Tech Stack](#Tech-Stack)
+- [Features](#features)
+- [Requirements](#requirements)
+- [Instalation](#instalation)
+- [Create Environment Variable](#create-environment-variable)
+- [Screenshots](#screenshots)
+- [Release Demo](#Demo)
+- [Related Project](#related-project-backend)
+- [Developed](#Developed)
+- [License](#License)
+- [Contact](#Contact)
 
-First, you will need to start **Metro**, the JavaScript _bundler_ that ships _with_ React Native.
 
-To start Metro, run the following command from the _root_ of your React Native project:
+## introduction
+
+I served as a Fullstack Web Developer in the development of Peworld, an innovative Android application focused on job search and recruiting. Peworld makes it easy for users to post personal data and portfolio information to search for work or recruit, with full integration to the Peworld website. What is unique about this application is its ability to provide real-time notifications to users when new recruitment or registration occurs, ensuring users never miss important opportunities.
+
+
+## Tech Stack
+
+**Programming language:** JavaScript (React Native)
+
+**HTTP Client:** Axios
+
+[![My Skills](https://skillicons.dev/icons?i=js,css,react)](https://skillicons.dev)
+
+
+
+## Features
+
+✨ Add portfolio : Users can post their portfolios to attract recruiters' attention.
+
+✨ Update personal data & portfolio : Allows users to update their personal and portfolio information.
+
+✨ Delete skill : Feature to delete irrelevant or unused skills
+
+✨Upload & update profile image : Users can upload and update their profile picture to strengthen personal branding
+
+✨ Post personal data : Users can post their complete personal data for recruiters to see
+
+✨ Worker Search : Recruiters can search for workers based on certain criteria to facilitate the recruitment process
+
+
+## Requirements
+
+- [`npm`](https://www.npmjs.com/get-npm)
+- [`React-native`](https://reactnative.dev/docs/getting-started)
+- [`Axios`](https://axios-http.com/docs/intro)
+- [`Backend Peworld`](https://github.com/crossxjonathan/peworld-backend)
+
+
+
+## Instalation
+- [`React-native`](https://reactnative.dev/docs/environment-setup)
+
+#### Clone this repository
 
 ```bash
-# using npm
-npm start
-
-# OR using Yarn
-yarn start
+   git clone https://github.com/crossxjonathan/hirejob-mobile.git
 ```
 
-## Step 2: Start your Application
-
-Let Metro Bundler run in its _own_ terminal. Open a _new_ terminal from the _root_ of your React Native project. Run the following command to start your _Android_ or _iOS_ app:
-
-### For Android
+#### Install Depedencies
 
 ```bash
-# using npm
-npm run android
-
-# OR using Yarn
-yarn android
+   npm install
 ```
 
-### For iOS
+#### Start Project
 
 ```bash
-# using npm
-npm run ios
-
-# OR using Yarn
-yarn ios
+   npm run dev
 ```
 
-If everything is set up _correctly_, you should see your new app running in your _Android Emulator_ or _iOS Simulator_ shortly provided you have set up your emulator/simulator correctly.
 
-This is one way to run your app — you can also run it directly from within Android Studio and Xcode respectively.
+## Create Environment Variable
 
-## Step 3: Modifying your App
+If you want to run this environment, you need to add the following environment variables to your .env file
 
-Now that you have successfully run the app, let's modify it.
+setup server: 
 
-1. Open `App.tsx` in your text editor of choice and edit some lines.
-2. For **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Developer Menu** (<kbd>Ctrl</kbd> + <kbd>M</kbd> (on Window and Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (on macOS)) to see your changes!
+`API_URL`
 
-   For **iOS**: Hit <kbd>Cmd ⌘</kbd> + <kbd>R</kbd> in your iOS Simulator to reload the app and see your changes!
+## Screenshots
 
-## Congratulations! :tada:
+<div align="center">
+    <p>Login Page</p>   
+    <img src="./src/assets/image/portfolio/Login1.png">   
+    <p>Register Page</p>   
+    <img src="./src/assets/image/portfolio/Register1.png">   
+    <p>Landing Page</p>   
+    <img src="./src/assets/image/portfolio/Landingpage.png">   
+</div>
+<div align="center" style="display: flex; flex-direction: column; align-items: center; margin: 20px;">
+    <p>Home</p>   
+    <img src="./src/assets/image/portfolio/Menu1.png">   
+    <p>Profile Worker</p>   
+    <img src="./src/assets/image/portfolio/workerProfile.png">   
+    <p>Portfolio</p>   
+    <img src="./src/assets/image/portfolio/workerPortfolio.png">
+    <p>Experience</p>   
+    <img src="./src/assets/image/portfolio/workerExperience.png">   
+    <p>Edit Profile Worker</p>   
+    <img src="./src/assets/image/portfolio/personalWorker.png">   
+    <p>Edit Skill Worker</p>   
+    <img src="./src/assets/image/portfolio/skill&Experience.png">   
+    <p>Edit Experience Worker</p>   
+    <img src="./src/assets/image/portfolio/experience display.png">  
+     <p>Edit Portfolio Worker</p>   
+    <img src="./src/assets/image/portfolio/editPortfolio.png">
+    <img src="./src/assets/image/portfolio/editPortfolioDisplay.png"> 
+    <p>Detail Worker</p>   
+    <img src="./src/assets/image/portfolio/detailWorker.png">  
+</div>
+<div align="center" style="display: flex; flex-direction: column; align-items: center; margin: 20px;">
+    <p>Profile Recruiter</p>   
+    <img src="./src/assets/image/portfolio/profileRecruiter.png">   
+    <p>Edit Profile Recruiter</p>   
+    <img src="./src/assets/image/portfolio/personalRecruiter.png">   
+    <p>Hire</p>    
+    <img src="./src/assets/image/portfolio/hireworkers.jpg">   
+    <p>History</p>    
+    <img src="./src/assets/image/portfolio/historyHire.png">   
+</div>
 
-You've successfully run and modified your React Native App. :partying_face:
 
-### Now what?
 
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [Introduction to React Native](https://reactnative.dev/docs/getting-started).
+## Release Demo
+- [`Demo`](https://drive.google.com/drive/folders/1_2DQyy4G83jz9LFf2zeaXjcoRmBE6100?usp=sharing)
 
-# Troubleshooting
 
-If you can't get this to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
+## Related Project (Backend)
 
-# Learn More
+- [`Backend Peworld`](https://github.com/crossxjonathan/peworld-backend.git)
 
-To learn more about React Native, take a look at the following resources:
 
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+
+## Developed :
+
+💻 [@crossxjonathan](https://github.com/crossxjonathan) as FullStack
+
+## License :
+
+-This project is licensed under the MIT License. Please refer to the [LICENSE](./LICENSE) file for further details
+
+## Contact :
+📧 firman.jonathan6398@gmail.com
+🔗 https://www.linkedin.com/in/firman-jonathan/
