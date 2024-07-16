@@ -36,8 +36,8 @@ const PersonalDataRecruiter = ({form, setForm}) => {
         <View style={{paddingTop: 30}}>
           <Textinput
             placeholder="Enter Your Company Name..."
-            value={form.company}
-            onChangeText={value => handleChange('company', value)}
+            value={form.name}
+            onChangeText={value => handleChange('name', value)}
           />
         </View>
       </View>

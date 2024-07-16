@@ -54,7 +54,7 @@ const EditRecruiterProfile = ({id}) => {
         const data = response.data.profile;
         console.log(data, '<<<<<<<<<<data');
         setForm({
-          company: data.company,
+          name: data.name,
           position: data.position,
           city: data.city,
           description: data.description,
@@ -85,7 +85,7 @@ const EditRecruiterProfile = ({id}) => {
       }
 
       const payload = {
-        company: formRef.current.company,
+        name: formRef.current.name,
         position: formRef.current.position,
         city: formRef.current.city,
         linkedin: formRef.current.linkedin,

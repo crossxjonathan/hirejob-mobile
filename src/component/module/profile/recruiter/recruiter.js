@@ -253,7 +253,7 @@ const MainRecruiterProfile = () => {
           gap: 10,
         }}>
         <Text style={{color: '#000000', fontSize: 20, fontWeight: '600'}}>
-          {profile.company || 'Company:....'}
+          {profile.name || 'Company:....'}
         </Text>
         <Text style={{color: '#1F2A36', fontSize: 14, fontWeight: '400'}}>
           {profile.position || 'Position:....'}

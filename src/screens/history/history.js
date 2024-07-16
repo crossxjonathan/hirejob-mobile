@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import ImageDefault from '../../assets/image/bg/profile1.png';
-import NoInbox from '../../assets/image/icon/inbox.png';
+import NoInbox from '../../assets/image/icon/noinbox.png';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import {API_URL} from '@env';
@@ -160,8 +160,8 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   noInboxImage: {
-    width: 200,
-    height: 200,
+    width: 150,
+    height: 150,
   },
 });
 
