@@ -112,10 +112,9 @@ setup server:
     <img src="./src/assets/image/portfolio/workerExperience.png">   
     <p>Edit Profile Worker</p>   
     <img src="./src/assets/image/portfolio/personalWorker.png">   
-    <p>Edit Skill Worker</p>   
-    <img src="./src/assets/image/portfolio/skill&Experience.png">   
-    <p>Edit Experience Worker</p>   
-    <img src="./src/assets/image/portfolio/experience display.png">  
+    <p>Edit Skill & Experience Worker</p>   
+    <img src="./src/assets/image/portfolio/skill&Experience.png">
+    <img src="./src/assets/image/portfolio/experience display.png">   
      <p>Edit Portfolio Worker</p>   
     <img src="./src/assets/image/portfolio/editPortfolio.png">
     <img src="./src/assets/image/portfolio/editPortfolioDisplay.png"> 
