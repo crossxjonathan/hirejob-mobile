@@ -1,11 +1,11 @@
 import {View, Text, Image, Alert} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import Profile from '../../../../assets/image/bg/profile1.png';
 import Location from '../../../../assets/image/icon/map.png';
 import Instagram from '../../../../assets/image/icon/instagram.png';
 import Linkedin from '../../../../assets/image/icon/LinkedIn.png';
 import LargeButtonPurple from '../../../base/button/largebuttonpurple';
-import {useNavigation} from '@react-navigation/native';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import LargeTransparentPurple from '../../../base/button/largetransparentpurple';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
@@ -56,9 +56,15 @@ const RecruiterProfiles = () => {
     }
   };
 
-  useEffect(() => {
-    handleGetProfile();
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      handleGetProfile();
+    }, []),
+  );
+
+  // useEffect(() => {
+  //   handleGetProfile();
+  // }, []);
 
   if (loading) {
     return (
@@ -103,7 +109,7 @@ const RecruiterProfiles = () => {
           gap: 10,
         }}>
         <Text style={{color: '#000000', fontSize: 20, fontWeight: '600'}}>
-          {profile.company || 'Company:....'}
+          {profile.name || 'Company:....'}
         </Text>
         <Text style={{color: '#1F2A36', fontSize: 14, fontWeight: '400'}}>
           {profile.position || 'Position:....'}

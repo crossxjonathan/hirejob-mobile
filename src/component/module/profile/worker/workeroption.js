@@ -8,13 +8,13 @@ import {
   ScrollView,
   Alert,
 } from 'react-native';
-import React, {useState, useRef, useEffect} from 'react';
+import React, {useState, useRef, useEffect, useCallback} from 'react';
 import image1 from '../../../../assets/image/bg/Rectangle637.png';
 import office from '../../../../assets/image/icon/office.png';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {API_URL} from '@env';
 import axios from 'axios';
-import {useRoute} from '@react-navigation/native';
+import {useFocusEffect, useRoute} from '@react-navigation/native';
 
 const WorkerOption = () => {
   const [exp, setExp] = useState([]);
@@ -64,10 +64,17 @@ const WorkerOption = () => {
     }
   };
 
-  useEffect(() => {
-    fetchData('experience', setExp);
-    fetchData('portfolio', setPort);
-  }, [id]);
+  useFocusEffect(
+    useCallback(() => {
+      fetchData('experience', setExp);
+      fetchData('portfolio', setPort);
+    }, [id]),
+  );
+
+  // useEffect(() => {
+  //   fetchData('experience', setExp);
+  //   fetchData('portfolio', setPort);
+  // }, [id]);
 
   const renderPortfolio = () => (
     <ScrollView style={{padding: 20}}>

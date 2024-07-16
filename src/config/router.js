@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import LandingPage from '../screens/LandingPage/index';
@@ -20,6 +20,7 @@ import FootBar from '../component/module/TabBar/footbar';
 import HireWorker from '../screens/Hire';
 import HistoryWorker from '../screens/history/history';
 import ChatPage from '../screens/chat';
+import {Image, StyleSheet} from 'react-native';
 
 const Tab = createBottomTabNavigator();
 
@@ -100,8 +101,24 @@ const ProfileRecruiterStack = () => {
 };
 
 const MainRouter = () => {
+  const [showImage, setShowImage] = useState(true);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setShowImage(false);
+    }, 4000);
+
+    return () => clearTimeout(timeout);
+  }, []);
+
   return (
     <NavigationContainer>
+      {showImage && (
+        <Image
+          source={require('../assets/image/peworld.png')}
+          style={styles.image}
+        />
+      )}
       <Stack.Navigator
         initialRouteName="LandingPage"
         screenOptions={{headerShown: false}}>
@@ -121,5 +138,18 @@ const MainRouter = () => {
     </NavigationContainer>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  image: {
+    width: '100%',
+    height: '100%',
+    resizeMode: 'cover',
+  },
+});
 
 export default MainRouter;

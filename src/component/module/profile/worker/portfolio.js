@@ -19,9 +19,7 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {launchImageLibrary} from 'react-native-image-picker';
 import ImageResizer from 'react-native-image-resizer';
-// import image1 from '../../../../assets/image/bg/Rectangle637.png';
 import MediumTransparentRed from '../../../base/button/mediumtransparentred';
-// import MediumTransparentBlue from '../../../base/button/mediumtransparentblue';
 
 const Portfolio = () => {
   const [port, setPort] = useState([]);
@@ -36,8 +34,11 @@ const Portfolio = () => {
   const formRef = useRef(form);
 
   const handleChange = (name, value) => {
-    setForm({...form, [name]: value});
-    formRef.current = {...formRef.current, [name]: value};
+    setForm(prevForm => ({
+      ...prevForm,
+      [name]: value,
+    }));
+    formRef.current[name] = value;
   };
 
   const handleImagePick = () => {
@@ -59,6 +60,7 @@ const Portfolio = () => {
           'JPEG',
           80,
         );
+
         handleChange('photo', resizedImage.uri);
       }
     });
@@ -67,6 +69,29 @@ const Portfolio = () => {
   const handleAddPortfolio = async () => {
     try {
       const token = await AsyncStorage.getItem('token');
+
+      if (form.photo) {
+        const formData = new FormData();
+        formData.append('photo', {
+          uri: form.photo,
+          type: 'image/jpeg',
+          name: 'portfolio.jpg',
+        });
+
+        const resImage = await axios.post(`${API_URL}/upload`, formData, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+
+        const imageData = resImage.data;
+        if (imageData.status === 'Success' && imageData.data.file_url) {
+          handleChange('photo', imageData.data.file_url);
+        } else {
+          throw new Error('Image upload failed');
+        }
+      }
 
       const payload = {
         application_name: form.appName,
@@ -82,30 +107,9 @@ const Portfolio = () => {
       });
 
       const portfolioData = resPortfolio.data;
-      console.log(portfolioData, '<<<<<<<<<<<<<<<<<data portfolio');
-
-      if (portfolioData) {
-        if (form.photo) {
-          const formData = new FormData();
-          formData.append('photo', {
-            uri: form.photo,
-            type: 'image/jpeg',
-            name: 'portfolio.jpg',
-          });
-
-          const resImage = await axios.post(`${API_URL}/upload`, formData, {
-            headers: {
-              Authorization: `Bearer ${token}`,
-              'Content-Type': 'multipart/form-data',
-            },
-          });
-
-          const imageData = resImage.data;
-          console.log(imageData, '<<<<<<<<<<<<<<<<<data portfolio image');
-          Alert.alert('Success', 'Portfolio and Image Uploaded Successfully!');
-        } else {
-          Alert.alert('Success', 'Portfolio added successfully!');
-        }
+      if (portfolioData.status === 'Success') {
+        Alert.alert('Success', 'Portfolio and Image Uploaded Successfully!');
+        getPortfolio();
       } else {
         Alert.alert('Error', 'Failed to add portfolio. Please try again.');
       }
@@ -124,19 +128,15 @@ const Portfolio = () => {
     }
   };
 
-
   const handleDeletePortfolio = async id => {
     try {
-      console.log(id, '<<<<<<<<<<<<<<<<<delete id');
       const token = await AsyncStorage.getItem('token');
       const res = await axios.delete(`${API_URL}/portfolio/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-      const data = res.data;
       setPort(prevPort => prevPort.filter(portfolio => portfolio.id !== id));
-      console.log(data, '<<<<<<<<<<<<<delete');
       Alert.alert('Delete portfolio Successfully!!');
     } catch (error) {
       if (error.response) {
@@ -166,15 +166,10 @@ const Portfolio = () => {
         },
       });
       const data = result.data.data;
-      console.log('Portfolio Data:', data);
       setPort(data);
     } catch (error) {
       console.error('Error fetching portfolio:', error);
     }
-  };
-
-  const bufferToString = buffer => {
-    return String.fromCharCode.apply(null, new Uint8Array(buffer));
   };
 
   useEffect(() => {

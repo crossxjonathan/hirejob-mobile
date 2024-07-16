@@ -1,10 +1,10 @@
 import {View, Text, Image, Alert} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useState, useCallback} from 'react';
 import Profile from '../../../../assets/image/bg/profile1.png';
 import Location from '../../../../assets/image/icon/map.png';
 import LargeButtonPurple from '../../../base/button/largebuttonpurple';
 import SkillContainer from '../../Skill/skillcontainer';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useFocusEffect} from '@react-navigation/native';
 import LargeTransparentPurple from '../../../base/button/largetransparentpurple';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
@@ -30,7 +30,6 @@ const WorkerProfiles = () => {
   const handleGetProfile = async () => {
     try {
       const token = await AsyncStorage.getItem('token');
-      // console.log(token, '<<<<<<<<<<<<<<token get profile');
       if (!token) {
         throw new Error('Token not found');
       }
@@ -55,9 +54,11 @@ const WorkerProfiles = () => {
     }
   };
 
-  useEffect(() => {
-    handleGetProfile();
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      handleGetProfile();
+    }, []),
+  );
 
   if (loading) {
     return (
