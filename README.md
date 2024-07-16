@@ -99,7 +99,9 @@ setup server:
     <p>Register Page</p>   
     <img src="./src/assets/image/portfolio/Register1.png">   
     <p>Landing Page</p>   
-    <img src="./src/assets/image/portfolio/Landingpage.png">   
+    <img src="./src/assets/image/portfolio/Landingpage.png">
+    <p>Splash Screen</p>   
+    <img src="./src/assets/image/portfolio/splace screen.png">
 </div>
 <div align="center" style="display: flex; flex-direction: column; align-items: center; margin: 20px;">
     <p>Home</p>   
