@@ -45,7 +45,7 @@ I served as a Fullstack Web Developer in the development of Peworld, an innovati
 
 ✨ Delete skill : Feature to delete irrelevant or unused skills
 
-✨Upload & update profile image : Users can upload and update their profile picture to strengthen personal branding
+✨Upload & update profile image : Users can upload and update directly by Camera or File manager of their profile picture to strengthen personal branding
 
 ✨ Post personal data : Users can post their complete personal data for recruiters to see
 
