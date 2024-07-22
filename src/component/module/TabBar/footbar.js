@@ -1,8 +1,9 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {View, TouchableOpacity, StyleSheet, Image} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import {API_URL} from '@env';
+import {useFocusEffect} from '@react-navigation/native';
 
 const ChatIcon = require('../../../assets/image/icon/chat.png');
 const MenuIcon = require('../../../assets/image/icon/menu.png');
@@ -12,26 +13,28 @@ const SearchIcon = require('../../../assets/image/icon/searchicon.png');
 function FootBar({state, descriptors, navigation}) {
   const [profileImage, setProfileImage] = useState(null);
 
-  useEffect(() => {
-    const fetchProfileImage = async () => {
-      try {
-        const token = await AsyncStorage.getItem('token');
-        if (!token) {
-          throw new Error('No token found');
-        }
-        const response = await axios.get(`${API_URL}/recruiters/profile`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        setProfileImage(response.data.profile?.photo);
-      } catch (error) {
-        console.log('Error fetching profile image:', error);
+  const fetchProfileImage = async () => {
+    try {
+      const token = await AsyncStorage.getItem('token');
+      if (!token) {
+        throw new Error('No token found');
       }
-    };
+      const response = await axios.get(`${API_URL}/recruiters/profile`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setProfileImage(response.data.profile?.photo);
+    } catch (error) {
+      console.log('Error fetching profile image:', error);
+    }
+  };
 
-    fetchProfileImage();
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      fetchProfileImage();
+    }, []),
+  );
 
   const renderIcon = (label, isFocused) => {
     const iconStyle = [styles.icon, label === 'Profile' && styles.profileIcon];

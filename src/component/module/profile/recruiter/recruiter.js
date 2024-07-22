@@ -209,7 +209,9 @@ const MainRecruiterProfile = () => {
         }}>
         <Image
           source={
-            profile.photo && typeof profile.photo === 'string'
+            newPhoto
+              ? {uri: newPhoto.uri}
+              : profile.photo
               ? {uri: profile.photo}
               : Profile
           }

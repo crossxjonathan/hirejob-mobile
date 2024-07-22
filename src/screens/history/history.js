@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
-import ImageDefault from '../../assets/image/bg/profile1.png';
+import ImageDefault from '../../assets/image/icon/hire-1714369_1280.jpg';
 import NoInbox from '../../assets/image/icon/noinbox.png';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
@@ -83,10 +83,7 @@ const HistoryWorker = () => {
             key={item.id || index}
             style={styles.hireContainer}>
             <View style={styles.hireInfo}>
-              <Image
-                source={item.photo ? {uri: item.photo} : ImageDefault}
-                style={styles.image}
-              />
+              <Image source={ImageDefault} style={styles.image} />
               <View>
                 <Text style={styles.h2}>{item.hire_name || 'Name:'}</Text>
                 <Text style={styles.p}>
@@ -147,7 +144,7 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     borderRadius: 100,
-    borderColor: 'black',
+    // borderColor: 'black',
     borderWidth: 2,
     marginRight: 20,
   },

@@ -15,7 +15,7 @@ const Card = ({item}) => {
   };
 
   const PressDetail = () => {
-    navigation.navigate('DetailWorker', {id: item.id});
+    navigation.navigate('DetailWorker', {id: item.users_id});
   };
 
   return (
@@ -32,7 +32,7 @@ const Card = ({item}) => {
           <Text style={styles.CardProfileJob}>{item?.description}</Text>
           <View style={styles.CategoryContainer}>
             <View style={{flexDirection: 'row', alignItems: 'center', gap: 5}}>
-              <Category id={item.id} onSkillsData={handleSkillsData} />
+              <Category id={item.users_id} onSkillsData={handleSkillsData} />
               <Text style={{color: 'grey', fontWeight: '600'}}>
                 +{skillsCount}
               </Text>

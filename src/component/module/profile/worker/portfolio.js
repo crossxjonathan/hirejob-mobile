@@ -110,6 +110,7 @@ const Portfolio = () => {
       if (portfolioData.status === 'Success') {
         Alert.alert('Success', 'Portfolio and Image Uploaded Successfully!');
         getPortfolio();
+        navigation.navigate('ProfileWorker');
       } else {
         Alert.alert('Error', 'Failed to add portfolio. Please try again.');
       }

@@ -37,8 +37,11 @@ const TextLoginRecruiter = () => {
       await AsyncStorage.setItem('token', data.token);
       navigation.navigate('RecruiterTab');
     } catch (error) {
-      const messageErr = error.response;
-      console.log(messageErr);
+      const status = error.response.status;
+      let messageErr = 'Invalid email or password. Please try again.';
+      if (status === 400) {
+        messageErr = 'Incorrect email or password.';
+      }
       showAlert('Something Went Wrong!', messageErr, 'Try Again');
     }
   };

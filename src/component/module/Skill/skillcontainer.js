@@ -98,7 +98,7 @@ const SkillContainer = ({id}) => {
       ) : (
         skills.map((skill, index) => (
           <View
-            key={index}
+            key={skill.id + '-' + index}
             style={{
               backgroundColor: '#FBB017',
               paddingHorizontal: 10,

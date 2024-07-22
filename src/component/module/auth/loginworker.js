@@ -48,7 +48,11 @@ const TextLoginWorker = () => {
         navigation.navigate('MainTab');
       }
     } catch (error) {
-      const messageErr = error.response;
+      const status = error.response.status;
+      let messageErr = 'Invalid email or password. Please try again.';
+      if (status === 400) {
+        messageErr = 'Incorrect email or password.';
+      }
       showAlert('Something Went Wrong!', messageErr, 'Try Again');
     }
   };

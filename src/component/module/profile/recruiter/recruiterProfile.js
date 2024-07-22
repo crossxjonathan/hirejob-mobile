@@ -83,7 +83,7 @@ const RecruiterProfiles = () => {
           paddingTop: 40,
           gap: 15,
           backgroundColor: '#ffffff',
-          height: 600,
+          height: 700,
           borderRadius: 10,
         }}>
         <Image

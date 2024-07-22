@@ -47,8 +47,7 @@ const Skill = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-      const data = response.data;
-      setSkills(prevSkills => [...prevSkills, data]);
+      setSkills([...skills, response.data.data]);
       setForm({skill_name: ''});
       showAlert('Success', 'Add Skill Successfully!!', 'Proceed');
     } catch (error) {

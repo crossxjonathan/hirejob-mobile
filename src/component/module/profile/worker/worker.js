@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   PermissionsAndroid,
   Platform,
+  StyleSheet,
 } from 'react-native';
 import Profile from '../../../../assets/image/bg/profile1.png';
 import Edit from '../../../../assets/image/icon/edit.png';
@@ -197,75 +198,120 @@ const MainWorkerProfile = () => {
 
   return (
     <View>
-      <View
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          paddingTop: 40,
-          gap: 15,
-          backgroundColor: '#ffffff',
-          height: 350,
-          borderRadius: 10,
-        }}>
+      <View style={styles.profileContainer}>
         <Image
-          source={profile.photo ? {uri: profile.photo} : Profile}
-          style={{
-            width: 100,
-            height: 100,
-            borderRadius: 100,
-            borderWidth: 2,
-            borderColor: '#000000',
-          }}
+          source={
+            newPhoto
+              ? {uri: newPhoto.uri}
+              : profile.photo
+              ? {uri: profile.photo}
+              : Profile
+          }
+          style={styles.profileImage}
         />
         <TouchableOpacity onPress={handleEditPhoto}>
-          <View style={{display: 'flex', flexDirection: 'row', gap: 5}}>
-            <Image source={Edit} style={{width: 20, height: 20}} />
-            <Text style={{color: '#aaaaaa', fontSize: 20, fontWeight: '600'}}>
-              Edit
-            </Text>
+          <View style={styles.editPhotoContainer}>
+            <Image source={Edit} style={styles.editIcon} />
+            <Text style={styles.editText}>Edit</Text>
           </View>
         </TouchableOpacity>
         {newPhoto && (
           <TouchableOpacity onPress={handleUploadProfile}>
-            <Text
-              style={{
-                color: '#FBB017',
-                fontSize: 18,
-                fontWeight: '600',
-                position: 'relative',
-                bottom: 14,
-                left: 2,
-              }}>
-              Upload Photo
-            </Text>
+            <Text style={styles.uploadText}>Upload Photo</Text>
           </TouchableOpacity>
         )}
       </View>
-      <View
-        style={{
-          position: 'absolute',
-          paddingTop: 200,
-          paddingLeft: 20,
-          gap: 10,
-        }}>
-        <Text style={{color: '#000000', fontSize: 20, fontWeight: '600'}}>
-          {profile.name || 'Name:....'}
-        </Text>
-        <Text style={{color: '#1F2A36', fontSize: 14, fontWeight: '400'}}>
-          {profile.job_desk || 'Job:....'}
-        </Text>
-        <View style={{display: 'flex', flexDirection: 'row', gap: 5}}>
-          <Image source={Location} style={{width: 20, height: 20}} />
-          <Text style={{color: '#aaaaaa', fontWeight: '400'}}>
+      <View style={styles.profileDetailsContainer}>
+        <Text style={styles.profileName}>{profile.name || 'Name:....'}</Text>
+        <Text style={styles.profileJob}>{profile.job_desk || 'Job:....'}</Text>
+        <View style={styles.profileLocationContainer}>
+          <Image source={Location} style={styles.locationIcon} />
+          <Text style={styles.profileLocation}>
             {profile.domicile || 'Location:....'}
           </Text>
         </View>
-        <Text style={{color: '#aaaaaa', fontSize: 14, fontWeight: '500'}}>
+        <Text style={styles.profileWorkplace}>
           {profile.workplace || 'Workplace:....'}
         </Text>
       </View>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  profileContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    paddingTop: 40,
+    gap: 15,
+    backgroundColor: '#ffffff',
+    height: 350,
+    borderRadius: 10,
+  },
+  profileImage: {
+    width: 100,
+    height: 100,
+    borderRadius: 100,
+    borderWidth: 2,
+    borderColor: '#000000',
+  },
+  editPhotoContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    gap: 5,
+  },
+  editIcon: {
+    width: 20,
+    height: 20,
+  },
+  editText: {
+    color: '#aaaaaa',
+    fontSize: 20,
+    fontWeight: '600',
+  },
+  uploadText: {
+    color: '#FBB017',
+    fontSize: 18,
+    fontWeight: '600',
+    position: 'relative',
+    bottom: 14,
+    left: 2,
+  },
+  profileDetailsContainer: {
+    position: 'absolute',
+    paddingTop: 200,
+    paddingLeft: 20,
+    gap: 10,
+  },
+  profileName: {
+    color: '#000000',
+    fontSize: 20,
+    fontWeight: '600',
+  },
+  profileJob: {
+    color: '#1F2A36',
+    fontSize: 14,
+    fontWeight: '400',
+  },
+  profileLocationContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    gap: 5,
+  },
+  locationIcon: {
+    width: 20,
+    height: 20,
+  },
+  profileLocation: {
+    color: '#1F2A36',
+    fontSize: 14,
+    fontWeight: '400',
+  },
+  profileWorkplace: {
+    color: '#1F2A36',
+    fontSize: 14,
+    fontWeight: '400',
+  },
+});
 
 export default MainWorkerProfile;
